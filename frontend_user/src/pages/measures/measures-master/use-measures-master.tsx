@@ -1,34 +1,15 @@
-import { useState, useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { MeasureDefinition } from "../types";
 import { useAsync } from "../../../hooks/use-async";
-import { uploadMeasure, allKey, Runs } from "../../../api/user";
+import { postUploadMeasure, getAllKey, RunAllKey } from "../../../api/req-user";
 
-type MMLoadingState = {
-  type: "loading";
-};
+import { MMState, useMeasuresState, getNow } from "./use-measures-state";
 
-type MMHomeState = {
-  type: "home";
-};
-
-type MMOneState = {
-  type: "one";
-  startedAt: string;
-};
-
-type MMManyState = {
-  type: "many";
-  iteration: number;
-  startedAt: string;
-};
-
-type MMState = MMHomeState | MMOneState | MMManyState | MMLoadingState;
-
-type Measures = Record<string, number>;
+type MSR = Record<string, number>;
 
 export type UseMeasuresMasterReturn = {
   state: MMState;
-  userData: Runs[];
+  userData: RunAllKey[];
   handleHome: () => void;
   handleStartOne: () => void;
   handleStartMany: () => void;
@@ -36,60 +17,24 @@ export type UseMeasuresMasterReturn = {
   handleFinishOne: (measures: Record<string, number>) => void;
 };
 
-const getNow = () => new Date().toISOString();
+const undefPromise = () => Promise.resolve();
 
-/*
- *
- *
- *  Synchronous state management
- *
- *
- */
-const useHandleState = (measure: MeasureDefinition) => {
-  const [state, ss] = useState<MMState>({ type: "home" });
-
-  const handleHome = useCallback(() => ss({ type: "home" }), []);
-  const handleStartOne = useCallback(() => ss({ type: "one", startedAt: getNow() }), []);
-  const handleStartMany = useCallback(() => ss({ type: "many", iteration: 0, startedAt: getNow() }), []);
-
-  const handleAdvanceMany = useCallback(() => {
-    if (state.type !== "many") return;
-    if (state.iteration < measure.numberPerDefault - 1) {
-      const iteration = state.iteration + 1;
-      const startedAt = getNow();
-      ss({ type: "many", iteration, startedAt });
-    } else {
-      ss({ type: "home" });
-    }
-  }, [state]);
-
-  return { state, ss, handleHome, handleStartOne, handleStartMany, handleAdvanceMany };
-};
-
-/*
- *
- *
- *  Asynchronous state management
- *
- *
- */
 const useHandleAsync = (measure: MeasureDefinition) => {
-  const loadingFnc = useCallback(() => allKey(measure.key), [measure.key]);
-
+  const loadingFnc = useCallback(() => getAllKey(measure.key), [measure.key]);
+  console.log("loadingFnc", measure.key, loadingFnc);
   const userData = useAsync(loadingFnc);
-
   return { userData };
 };
 
 export const useMeasuresMaster = (measure: MeasureDefinition): UseMeasuresMasterReturn => {
-  const { state, handleHome, handleStartOne, handleStartMany, handleAdvanceMany } = useHandleState(measure);
+  const { state, handleHome, handleStartOne, handleStartMany, handleAdvanceMany } = useMeasuresState(measure);
 
   const { userData } = useHandleAsync(measure);
 
   const handleOneUpload = useCallback(
-    async (measures: Measures) => {
-      if (state.type !== "one" && state.type !== "many") return;
-      await uploadMeasure({
+    async (measures: MSR) => {
+      if (state.type === "loading" || state.type === "home") return;
+      await postUploadMeasure({
         key: measure.key,
         startedAt: state.startedAt,
         endedAt: getNow(),
@@ -101,17 +46,17 @@ export const useMeasuresMaster = (measure: MeasureDefinition): UseMeasuresMaster
   );
 
   const handleNextMany = useCallback(
-    (msr: Measures) => handleOneUpload(msr).then(handleAdvanceMany),
-    [state, handleOneUpload, handleAdvanceMany]
+    (msr: MSR) => handleOneUpload(msr).then(handleAdvanceMany),
+    [handleOneUpload, handleAdvanceMany]
   );
 
   const handleFinishOne = useCallback(
-    async (msr: Measures) => handleOneUpload(msr).then(handleHome),
-    [state, handleOneUpload, handleHome]
+    (msr: MSR) => handleOneUpload(msr).then(handleHome),
+    [handleOneUpload, handleHome]
   );
 
   const stateSwitched = (() => {
-    if (userData.type === "loading") {
+    if (userData?.type === "loading") {
       return { type: "loading" as const };
     }
     return state;

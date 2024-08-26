@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
-type AsyncState<T> =
+export type AsyncState<T> =
   | { data: T; type: "success"; isRefreshing: boolean }
   | { data: undefined; type: "loading" }
   | { data: undefined; error: Error; type: "failure" };
@@ -13,6 +13,7 @@ export function useAsync<T>(asyncFunction: () => Promise<T>) {
 
   const execute = useCallback(
     async (shouldRefresh: boolean = false) => {
+      console.log("Executing loading function", shouldRefresh);
       if (shouldRefresh && state.type === "success") {
         setState((prevState) => ({ ...prevState, isRefreshing: true }));
       } else {
@@ -30,13 +31,18 @@ export function useAsync<T>(asyncFunction: () => Promise<T>) {
         });
       }
     },
-    [asyncFunction]
+    [asyncFunction, state.type]
   );
 
-  // Onload
+  const initialLoadRef = useRef(false);
   useEffect(() => {
-    execute(false);
-  }, [execute]);
+    if (!initialLoadRef.current) {
+      console.log("initialLoadRef.current", initialLoadRef.current);
+      execute(false);
+      initialLoadRef.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const reload = useCallback(() => {
     execute(false);
@@ -44,7 +50,7 @@ export function useAsync<T>(asyncFunction: () => Promise<T>) {
 
   const refresh = useCallback(() => {
     execute(true);
-  }, [execute, state.type]);
+  }, [execute]);
 
   return {
     ...state,

@@ -7,6 +7,7 @@ import { ViewOne } from "./ViewOne";
 import { ViewMany } from "./ViewMany";
 
 export const MeasuresMaster = ({ measure }: { measure: MeasureDefinition }) => {
+  console.log("MeasuresMaster - ", measure.key);
   const props = useMeasuresMaster(measure);
   return (
     <PageMain>

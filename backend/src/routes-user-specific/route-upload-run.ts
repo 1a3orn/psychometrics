@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import { Task, Run, Measure } from "../db/entities/entities";
+import { Task, Run, Measure, User } from "../db/entities/entities";
 
 import { z } from "zod";
 import { getUserId } from "../auth";
@@ -30,11 +30,11 @@ export const routeUploadRun = async (ctx: Context) => {
 
   await dataSource.manager.transaction(async (transaction) => {
     const run = new Run();
-    run.started_at = new Date(body.startedAt);
-    run.ended_at = new Date(body.endedAt);
+    run.startedAt = new Date(body.startedAt);
+    run.endedAt = new Date(body.endedAt);
     run.metadata = body.metadata;
     run.task = task;
-    run.user = userId;
+    run.user = { id: userId } as User;
     await transaction.save(run);
 
     const measures = body.measures.map((measure) => {

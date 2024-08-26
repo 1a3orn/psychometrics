@@ -1,13 +1,13 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
-import { useUser } from "../../contexts"
-import { VisualElement } from "./VisualElement"
+import { useUser } from "../../contexts";
+import { VisualElement } from "./VisualElement";
 
-import { useRedirectIfNotLoggedIn } from "../../hooks"
+import { useRedirectIfNotLoggedIn } from "../../hooks";
 
 type NavbarProps = {
-  title: string
-}
+  title: string;
+};
 
 const NAV_LINKS = [
   {
@@ -18,23 +18,23 @@ const NAV_LINKS = [
     label: "Analytics",
     href: "/analytics",
   },
-]
+];
 
 export const Navbar: React.FC<NavbarProps> = ({ title }) => {
-  const { logout, state } = useUser()
-  const nav = useNavigate()
+  const { logout, state } = useUser();
+  const nav = useNavigate();
 
-  useRedirectIfNotLoggedIn()
+  useRedirectIfNotLoggedIn();
 
   const onClickSignOut = () => {
     logout().then(() => {
-      nav("/login")
-    })
-  }
+      nav("/login");
+    });
+  };
 
-  const onClickSettings = () => nav("/settings")
+  const onClickSettings = () => nav("/settings");
 
-  const onClickAccount = () => nav("/account")
+  const onClickAccount = () => nav("/account");
 
   return (
     <VisualElement
@@ -45,5 +45,5 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
       onClickSettings={onClickSettings}
       onClickAccount={onClickAccount}
     />
-  )
-}
+  );
+};

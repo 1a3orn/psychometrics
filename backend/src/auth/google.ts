@@ -1,25 +1,20 @@
-import { Context } from 'koa';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import { Context } from "koa";
 
-import { User } from '../db';
-import { Result } from '../types';
+import { Result } from "../types";
 
+import { TokenPayload } from "./tokens";
 
 export type LoginRequestBodyGoogle = {
-    type: "GOOGLE"
-    token: string;
-}
+  type: "GOOGLE";
+  token: string;
+};
 
-const SALT_ROUNDS = 10;
+const getErrror = () => ({ ok: false as false, error: "MISSING_USERNAME_OR_PASSWORD" });
 
-const getErrror = () => ({ ok: false as false, error: 'MISSING_USERNAME_OR_PASSWORD' });
+export const loginGoogle = async (ctx: Context): Promise<Result<TokenPayload, string>> => {
+  return getErrror();
+};
 
-export const loginGoogle = async (ctx: Context): Promise<Result<{ userId: string }, string>> => {
-
-    return getErrror();
-}
-
-export const signupGoogle = async (ctx: Context): Promise<Result<{ userId: string }, string>> => {
-    return getErrror();
-}
+export const signupGoogle = async (ctx: Context): Promise<Result<TokenPayload, string>> => {
+  return getErrror();
+};

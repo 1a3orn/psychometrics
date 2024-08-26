@@ -1,26 +1,24 @@
-import React from "react"
-import { useAsync } from "../../hooks"
-import {
-  PageMain,
-  Navbar,
-  PageContent,
-  List,
-  BasicCard,
-} from "../../components"
-import { ALL_MEASURES } from "../measures/measures"
-import { allTasks, latestRuns } from "../../api"
+import { PageMain, Navbar, PageContent, List, BasicCard } from "../../components";
+import { ALL_MEASURES } from "../measures/measures";
+import { UserMainProvider } from "./UserMainContext";
 
 export const UserDashbooardPage = () => {
-  const { data, type, reload, refresh } = useAsync(latestRuns)
-  const other = useAsync(allTasks)
   return (
     <PageMain>
       <Navbar title="Main" />
       <PageContent>
-        <BasicCard title="Possible Measures">
-          <List elements={ALL_MEASURES} />
-        </BasicCard>
+        <UserMainProvider>
+          <UserDashContent />
+        </UserMainProvider>
       </PageContent>
     </PageMain>
-  )
-}
+  );
+};
+
+export const UserDashContent = () => {
+  return (
+    <BasicCard title="Possible Measures">
+      <List elements={ALL_MEASURES} />
+    </BasicCard>
+  );
+};

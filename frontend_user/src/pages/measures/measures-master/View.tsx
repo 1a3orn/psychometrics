@@ -2,7 +2,7 @@ import { UseMeasuresMasterReturn } from "./use-measures-master";
 import { MeasureDefinition } from "../types";
 
 import { PageContent, BasicCard, Button } from "../../../components";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 // Convert to a date
 const dataFormatter = (number: number) => new Date(number).toLocaleDateString();
@@ -44,14 +44,12 @@ export const View = (props: UseMeasuresMasterReturn & { measure: MeasureDefiniti
   const { userData } = props;
 
   const mappedData = userData.map((run, index) => {
-    const base: Record<string, number | string> = { startedAt: new Date(run.started_at).getTime() };
+    const base: Record<string, number | string> = { startedAt: new Date(run.startedAt).getTime() };
     run.measures.forEach((measure) => {
       base[measure.key] = measure.number;
     });
     return base;
   });
-
-  console.log(mappedData, props.measure.measures);
 
   return (
     <PageContent>
