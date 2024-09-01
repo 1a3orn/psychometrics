@@ -1,0 +1,22 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "copy": "pnpm run build && rsync -av --exclude='*.spec.ts' src/ ../frontend_user/src/shared-automatic/ && rsync -av --exclude='*.spec.ts' src/ ../backend/src/shared-automatic/",
+    "start": "node dist/index.js",
+    "dev": "tsc -w",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.5.4"
+  }
+}
