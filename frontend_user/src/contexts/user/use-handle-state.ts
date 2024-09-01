@@ -15,9 +15,13 @@ export const useHandleState = (): UserContextType => {
   useEffect(() => {
     const token = localStorage.getItem(USER_TOKEN_KEY);
     if (token) {
-      const decoded = jwtDecode(token) as any;
-      if (decoded && typeof decoded !== "string" && typeof decoded === "object") {
-        setState({ type: "LOGGED_IN", username: decoded.username, token });
+      try {
+        const decoded = jwtDecode(token) as any;
+        if (decoded && typeof decoded !== "string" && typeof decoded === "object") {
+          setState({ type: "LOGGED_IN", username: decoded.username, token });
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
       }
     } else {
       setState({ type: "NOT_LOGGED_IN" });
@@ -26,6 +30,8 @@ export const useHandleState = (): UserContextType => {
 
   const handleSetLoggedIn = useCallback((result: ResultSuccess<{ token: string }>, username: string) => {
     const { token } = result.value;
+    console.log("token", token);
+    console.log("username", username);
     localStorage.setItem(USER_TOKEN_KEY, token);
     setState({ type: "LOGGED_IN", username, token });
     return result;

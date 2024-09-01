@@ -1,6 +1,6 @@
 import { Context } from "koa";
 
-import { Result } from "../types";
+import { Result, errorResult, wrapResult } from "../shared-automatic";
 
 import { TokenPayload } from "./tokens";
 
@@ -9,12 +9,10 @@ export type LoginRequestBodyGoogle = {
   token: string;
 };
 
-const getErrror = () => ({ ok: false as false, error: "MISSING_USERNAME_OR_PASSWORD" });
-
-export const loginGoogle = async (ctx: Context): Promise<Result<TokenPayload, string>> => {
-  return getErrror();
+export const loginGoogle = async (ctx: Context): Promise<Result<TokenPayload>> => {
+  return errorResult("Not implemented");
 };
 
-export const signupGoogle = async (ctx: Context): Promise<Result<TokenPayload, string>> => {
-  return getErrror();
+export const signupGoogle = async (ctx: Context): Promise<Result<TokenPayload>> => {
+  return errorResult("Not implemented");
 };

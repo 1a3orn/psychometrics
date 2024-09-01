@@ -21,7 +21,7 @@ const handleAuthAction = async (ctx: Context, action: "login" | "signup") => {
 
   const tokenPayload = await methods[body.type][action](ctx);
 
-  if (!tokenPayload.ok) {
+  if (!tokenPayload.success) {
     ctx.body = errorResult(tokenPayload.error);
   } else {
     if (!ctx.session) return errorResult("No session");

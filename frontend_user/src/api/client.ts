@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import { Result } from "../shared-automatic";
 import { USER_TOKEN_KEY } from "../contexts/user/use-handle-state";
 
 export const client = axios.create({
@@ -23,19 +24,28 @@ client.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    const handleFailure = () => {
+      console.log("handleFailure", error.response.data);
+      localStorage.removeItem(USER_TOKEN_KEY);
+      window.location.href = "/login";
+      return Promise.resolve();
+    };
+
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const response = await axios.post("/api/auth/refresh");
-        const newToken = response.data.token;
-        localStorage.setItem(USER_TOKEN_KEY, newToken);
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-        return client(originalRequest);
+        const response = await axios.post<Result<{ token: string }>>("/api/auth/refresh");
+        if (response.data.success) {
+          const newToken = response.data.value.token;
+          localStorage.setItem(USER_TOKEN_KEY, newToken);
+          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+          return client(originalRequest);
+        } else {
+          return handleFailure();
+        }
       } catch (refreshError) {
-        console.log("Error refreshing token", refreshError);
-        localStorage.removeItem(USER_TOKEN_KEY);
-        window.location.href = "/login";
-        return Promise.reject(refreshError);
+        return handleFailure();
       }
     }
     return Promise.reject(error);
