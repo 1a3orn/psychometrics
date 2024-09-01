@@ -1,7 +1,7 @@
-import React from "react"
+import React from "react";
 
 interface PageFacingProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const PageLogin: React.FC<PageFacingProps> = ({ children }) => {
@@ -12,13 +12,13 @@ export const PageLogin: React.FC<PageFacingProps> = ({ children }) => {
     >
       {children}
     </div>
-  )
-}
+  );
+};
 
 export const PageLoginContent: React.FC<PageFacingProps> = ({ children }) => {
   return (
     <div className="relative mx-auto flex min-h-dvh w-full max-w-10xl items-center justify-center overflow-hidden p-4 lg:p-8">
       {children}
     </div>
-  )
-}
+  );
+};

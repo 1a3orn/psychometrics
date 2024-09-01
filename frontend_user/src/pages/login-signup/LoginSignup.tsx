@@ -1,30 +1,11 @@
-import { useCallback } from "react";
-import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
-import { useUser } from "../../contexts/user";
+import { useLoginSignup } from "./use-login-signup";
 
-import { useBasicForm } from "../../hooks";
-import { PageLogin, PageLoginContent, CenteredCard, InputField } from "../../components";
+import { PageLogin, PageLoginContent, CenteredCard, InputField, ErrorMessage } from "../../components";
 
 export const LoginSignupPage = () => {
-  const { state, handleChange } = useBasicForm(["username", "password", "email"]);
-
-  const nav = useNavigate();
-  const { signup } = useUser();
-
-  const handleLoginClick = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      signup(state.username, state.password, state.email).then((result) => {
-        if (result.success) {
-          nav("/dashboard");
-        } else {
-          console.log(result);
-        }
-      });
-    },
-    [signup, state, nav]
-  );
+  const { state, handleChange, handleLoginClick, error } = useLoginSignup();
 
   return (
     <PageLogin>
@@ -35,8 +16,13 @@ export const LoginSignupPage = () => {
             <InputField name="username" value={state.username} onChange={handleChange} />
             <InputField name="email" value={state.email} onChange={handleChange} />
             <InputField name="password" value={state.password} onChange={handleChange} type="password" />
-            <button type="submit">Login</button>
+            <button type="submit">Signup</button>
+            <ErrorMessage error={error} />
           </form>
+          <div className="mt-4">
+            <p>Already have an account?</p>
+            <Link to="/login">Login</Link>
+          </div>
         </CenteredCard>
       </PageLoginContent>
     </PageLogin>

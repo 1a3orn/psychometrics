@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 import { LoginState, UserContextType } from "./types";
+import { ResultSuccess } from "../../shared-automatic";
 
 import { postLogin, postSignup, postLogout } from "../../api";
 
@@ -23,26 +24,23 @@ export const useHandleState = (): UserContextType => {
     }
   }, []);
 
+  const handleSetLoggedIn = useCallback((result: ResultSuccess<{ token: string }>, username: string) => {
+    const { token } = result.value;
+    localStorage.setItem(USER_TOKEN_KEY, token);
+    setState({ type: "LOGGED_IN", username, token });
+    return result;
+  }, []);
+
   const signup = useCallback(async (username: string, password: string, email: string, type: string = "LOCAL") => {
     const data = await postSignup(username, password, email, type);
-
-    if (data.token) {
-      localStorage.setItem(USER_TOKEN_KEY, data.token);
-      setState({ type: "LOGGED_IN", username, token: data.token });
-      return { success: true as true };
-    }
-    return { success: false as false, message: `Failed signup` };
+    if (data.success) handleSetLoggedIn(data, username);
+    return data;
   }, []);
 
   const login = useCallback(async (username: string, password: string, type: string = "LOCAL") => {
     const data = await postLogin(username, password, type);
-
-    if (data.token) {
-      localStorage.setItem(USER_TOKEN_KEY, data.token);
-      setState({ type: "LOGGED_IN", username, token: data.token });
-      return { success: true as true };
-    }
-    return { success: false as false, message: `Failed signup` };
+    if (data.success) return handleSetLoggedIn(data, username);
+    return data;
   }, []);
 
   const logout = async () => {

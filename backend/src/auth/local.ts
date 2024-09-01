@@ -10,7 +10,7 @@ import { TokenPayload } from "./tokens";
 
 const SALT_ROUNDS = 10;
 
-const getErrror = () => ({ ok: false as false, error: "MISSING_USERNAME_OR_PASSWORD" });
+const getErrror = () => ({ ok: false as false, error: "Wrong username or password" });
 
 const schemaLogin = z.object({
   type: z.literal("LOCAL"),
@@ -43,7 +43,8 @@ export const loginLocal = async (ctx: Context): Promise<Result<TokenPayload, str
   const hashedPassword = loginStrategy?.strategyData?.hashedPassword;
   if (!hashedPassword) return getErrror();
 
-  if (!bcrypt.compare(password, loginStrategy.strategyData.hashedPassword)) return getErrror();
+  const validPassword = await bcrypt.compare(password, loginStrategy.strategyData.hashedPassword);
+  if (!validPassword) return getErrror();
 
   return { ok: true, value: { userId: user.id, username: user.username } };
 };
@@ -54,7 +55,7 @@ export const signupLocal = async (ctx: Context): Promise<Result<TokenPayload, st
   const { username, password, email } = schemaSignup.parse(ctx.request.body);
 
   const existingUser = await User.findOne({ where: { username } });
-  if (existingUser) return { ok: false, error: "USER_ALREADY_EXISTS" };
+  if (existingUser) return { ok: false, error: "User already exists" };
 
   const dataSource = getAppDataSource(ctx);
 
@@ -73,7 +74,7 @@ export const signupLocal = async (ctx: Context): Promise<Result<TokenPayload, st
     await transaction.save(loginStrategy);
   });
 
-  if (!newUser) return { ok: false, error: "USER_CREATION_FAILED" };
+  if (!newUser) return { ok: false, error: "User creation failed" };
 
   return { ok: true, value: { userId: newUser.id, username: newUser.username } };
 };

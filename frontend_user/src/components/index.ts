@@ -7,3 +7,4 @@ export * from "./PageMain";
 export * from "./CenteredCard";
 export * from "./InputField";
 export * from "./Button";
+export * from "./ErrorMessage";

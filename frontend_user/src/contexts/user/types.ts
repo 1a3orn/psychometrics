@@ -1,3 +1,5 @@
+import { AuthResponse } from "../../api/req-auth";
+
 export type LoggedInUser = {
   type: "LOGGED_IN";
   username: string;
@@ -25,8 +27,7 @@ export type LoginResults =
 
 export type UserContextType = {
   state: LoginState;
-  login: (username: string, password: string) => Promise<LoginResults>;
+  signup: (username: string, password: string, email: string, type?: string) => Promise<AuthResponse>;
+  login: (username: string, password: string) => Promise<AuthResponse>;
   logout: () => Promise<void>;
-
-  signup: (username: string, password: string, email: string, type?: string) => Promise<LoginResults>;
 };

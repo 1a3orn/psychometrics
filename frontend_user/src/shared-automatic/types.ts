@@ -1,12 +1,4 @@
-export type Result<T> =
-  | {
-      success: true;
-      value: T;
-    }
-  | {
-      success: false;
-      error: string;
-    };
+import { Result } from "./result";
 
 export type Task = {
   key: string;

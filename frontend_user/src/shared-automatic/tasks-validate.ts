@@ -1,4 +1,5 @@
-import { Result, Task, TaskDecorated } from "./types";
+import { Task, TaskDecorated } from "./types";
+import { Result } from "./result";
 
 export const addValidation = (task: Task): TaskDecorated => {
   const measures = task.measures;

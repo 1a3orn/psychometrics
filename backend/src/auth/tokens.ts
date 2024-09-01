@@ -8,10 +8,10 @@ export type TokenPayload = {
   username: string;
 };
 
-export const signToken = (data: TokenPayload, ctx: Context) => {
+export const signToken = (data: TokenPayload) => {
   const payload = { userId: data.userId, username: data.username };
 
-  return jwt.sign(payload, getStrCfg("USER_TOKEN_SECRET"), { expiresIn: "15s" });
+  return jwt.sign(payload, getStrCfg("USER_TOKEN_SECRET"), { expiresIn: "30s" });
 };
 
 export const verifyToken = (token: string) => {
