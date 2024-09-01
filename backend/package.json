@@ -10,6 +10,7 @@
     "migration:generate:initial": "pnpm run typeorm migration:generate src/db/migrations/initial --dataSource src/db/db.ts",
     "migration:generate:next": "pnpm run typeorm migration:generate src/db/migrations/next --dataSource src/db/db.ts",
     "migration:run": "pnpm run typeorm migration:run --dataSource src/db/db.ts",
+    "seed": "npx ts-node src/db/seed.ts",
     "dev": "nodemon src/server.ts"
   },
   "keywords": [],

@@ -2,25 +2,28 @@ import { Context } from "koa";
 import { Run } from "../db/entities/entities";
 import { getUserId } from "../auth";
 
+import { TASK_KEYS } from "../shared-automatic";
+
 export const routeLatestRuns = async (ctx: Context) => {
   const userId = await getUserId(ctx);
-  // Get the most recent run for each task
+
   const distinctRuns = await Run.createQueryBuilder("run")
-    .innerJoinAndSelect("run.task", "task")
     .where("run.user.id = :user_id", { user_id: userId })
     .andWhere((qb) => {
       const subQuery = qb
         .subQuery()
-        .select("MAX(r.created_at)")
-        .from(Run, "r")
-        .where("r.task.id = run.task.id")
+        .select("MAX(run.createdAt)", "maxDate")
+        .from(Run, "run")
+        .where("run.user.id = :user_id")
+        .groupBy("run.key")
         .getQuery();
-      return "run.created_at = " + subQuery;
+      return "run.createdAt IN " + subQuery;
     })
-    .orderBy("run.created_at", "DESC")
+    .setParameter("user_id", userId)
     .getMany();
+
   ctx.body = distinctRuns.map((run) => ({
-    key: run.task.key,
+    key: run.key,
     mostRecentRunDate: run.createdAt,
   }));
 };

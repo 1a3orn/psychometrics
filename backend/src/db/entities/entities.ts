@@ -8,44 +8,44 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  Index,
 } from "typeorm";
 
 export abstract class BaseTable extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "created_at", nullable: false })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updated_at", nullable: false })
   updatedAt: Date;
 }
 
 @Entity()
 export class User extends BaseTable {
-  @Column({ unique: true, name: "email" })
-  email: string;
-
-  @Column({ name: "username" })
+  @Column({ name: "username", nullable: false })
+  @Index({ unique: true })
   username: string;
+
+  @Column({ unique: true, name: "email", nullable: false })
+  email: string;
 
   @OneToMany(() => UserLoginStrategy, (strategy) => strategy.user)
   loginStrategies: UserLoginStrategy[];
 
   @OneToMany(() => Run, (run) => run.user)
   runs: Run[];
-
-  @OneToMany(() => Measure, (measure) => measure.user)
-  measures: Measure[];
 }
 
 @Entity()
 export class Admin extends BaseTable {
-  @Column({ unique: true, name: "email" })
-  email: string;
-
-  @Column({ name: "username" })
+  @Column({ name: "username", nullable: false })
+  @Index({ unique: true })
   username: string;
+
+  @Column({ unique: true, name: "email", nullable: false })
+  email: string;
 
   @OneToMany(() => AdminLoginStrategy, (strategy) => strategy.admin)
   loginStrategies: AdminLoginStrategy[];
@@ -60,12 +60,13 @@ export class Admin extends BaseTable {
 export class UserLoginStrategy extends BaseTable {
   @ManyToOne(() => User, (user) => user.loginStrategies)
   @JoinColumn({ name: "user_id" })
+  @Index()
   user: User;
 
-  @Column({ name: "strategy_type" })
+  @Column({ name: "strategy_type", nullable: false })
   strategyType: string;
 
-  @Column("jsonb", { name: "strategy_data" })
+  @Column("jsonb", { name: "strategy_data", nullable: false })
   strategyData: Record<string, any>;
 }
 
@@ -73,61 +74,47 @@ export class UserLoginStrategy extends BaseTable {
 export class AdminLoginStrategy extends BaseTable {
   @ManyToOne(() => Admin, (admin) => admin.loginStrategies)
   @JoinColumn({ name: "admin_id" })
+  @Index()
   admin: Admin;
 
-  @Column({ name: "strategy_type" })
+  @Column({ name: "strategy_type", nullable: false })
   strategyType: string;
 
-  @Column("jsonb", { name: "strategy_data" })
+  @Column("jsonb", { name: "strategy_data", nullable: false })
   strategyData: Record<string, any>;
 }
 
 /*
- * Tasks - Run - Measure is the hierarchy
+ * 'Task' - Run - Measure is the hierarchy
  *
- * Task has many Runs
+ * Task has many Runs, but Task is also implicit and not a DB entity
  * Run has many Measures
  * Measure has no children
  *
- * Only one task-key for whole system
  * Many runs per task and per user
  * A few measures per run
  */
-@Entity()
-export class Task extends BaseTable {
-  @Column({ unique: true, name: "key" })
-  key: string;
-
-  @Column({ name: "name" })
-  name: string;
-
-  @Column("simple-array", { name: "measures" })
-  measures: string[];
-
-  @Column({ name: "task_version" })
-  taskVersion: number;
-
-  @OneToMany(() => Run, (run) => run.task)
-  runs: Run[];
-}
 
 @Entity()
 export class Run extends BaseTable {
-  @Column({ name: "started_at" })
+  @Index()
+  @Column({ name: "key" })
+  key: string;
+
+  @Column({ name: "started_at", nullable: false })
+  @Index()
   startedAt: Date;
 
-  @Column({ name: "ended_at" })
+  @Column({ name: "ended_at", nullable: false })
+  @Index()
   endedAt: Date;
 
-  @Column("jsonb", { name: "metadata", nullable: true })
+  @Column("jsonb", { name: "metadata", nullable: false })
   metadata: Record<string, any>;
-
-  @ManyToOne(() => Task, (task) => task.runs)
-  @JoinColumn({ name: "task_id" })
-  task: Task;
 
   @ManyToOne(() => User, (user) => user.runs)
   @JoinColumn({ name: "user_id" })
+  @Index()
   user: User;
 
   @OneToMany(() => Measure, (measure) => measure.run)
@@ -136,17 +123,14 @@ export class Run extends BaseTable {
 
 @Entity()
 export class Measure extends BaseTable {
-  @Column({ name: "key" })
+  @Column({ name: "key", nullable: false })
   key: string;
 
-  @Column({ name: "number" })
+  @Column({ name: "number", type: "float", nullable: false })
   number: number;
 
   @ManyToOne(() => Run, (run) => run.measures)
   @JoinColumn({ name: "run_id" })
+  @Index()
   run: Run;
-
-  @ManyToOne(() => User, (user) => user.measures)
-  @JoinColumn({ name: "user_id" })
-  user: User;
 }

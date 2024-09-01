@@ -3,7 +3,7 @@ import Router from "koa-router";
 import session from "koa-session";
 import bodyParser from "koa-bodyparser";
 
-import { middlewareError, middlewareLogger } from "./shared";
+import { middlewareError, middlewareLogger } from "./shared-middleware";
 import { getAddDataSourceToContext } from "./db/add-datasource";
 
 export const getApp = async ({ sessionSecret }: { sessionSecret: string }) => {

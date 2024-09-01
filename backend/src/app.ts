@@ -1,5 +1,5 @@
 import { getStrCfg } from "./config";
-import { serveStatic } from "./shared";
+import { serveStatic } from "./shared-middleware";
 import { getUserCommonRoutes } from "./routes-user-common";
 import { getUserSpecificRoutes } from "./routes-user-specific";
 import { getAuthRoutes } from "./auth";
@@ -25,6 +25,7 @@ export const appUser = async () => {
     getUserSpecificRoutes(),
   ]);
 
+  // To dump????
   app.use(
     serveStatic({
       folder: getStrCfg("USER_STATIC_DIR"),
