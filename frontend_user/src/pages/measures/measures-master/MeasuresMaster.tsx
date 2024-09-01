@@ -1,13 +1,11 @@
 import { MeasureDefinition } from "../types";
 
 import { PageMain, Navbar } from "../../../components";
+import { isMany } from "./use-measures-state";
 import { useMeasuresMaster, UseMeasuresMasterReturn } from "./use-measures-master";
 import { View } from "./View";
-import { ViewOne } from "./ViewOne";
-import { ViewMany } from "./ViewMany";
 
 export const MeasuresMaster = ({ measure }: { measure: MeasureDefinition }) => {
-  console.log("MeasuresMaster - ", measure.key);
   const props = useMeasuresMaster(measure);
   return (
     <PageMain>
@@ -28,4 +26,16 @@ export const SwitchOnState = (props: UseMeasuresMasterReturn & { measure: Measur
     case "many":
       return <ViewMany {...props} />;
   }
+};
+
+export const ViewMany = (props: UseMeasuresMasterReturn & { measure: MeasureDefinition }) => {
+  const state = props.state;
+  if (!isMany(state)) return null;
+  // Flush the state after every iteration, just to be safe
+  const key = props.measure.key + state.iteration + "-many";
+  return <props.measure.Component key={key} handleCancel={props.handleHome} handleSubmit={props.handleNextMany} />;
+};
+
+export const ViewOne = (props: UseMeasuresMasterReturn & { measure: MeasureDefinition }) => {
+  return <props.measure.Component handleCancel={props.handleHome} handleSubmit={props.handleFinishOne} />;
 };

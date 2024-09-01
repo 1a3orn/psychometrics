@@ -4,11 +4,11 @@ import { getLatestRuns, allTasks, LatestRuns, Task } from "../../api";
 import { useAsync, AsyncState } from "../../hooks";
 
 const request = async () => {
-  const [runs, tasks] = await Promise.all([getLatestRuns(), allTasks()]);
-  return { latestRuns: runs, allTasks: tasks };
+  const [runs] = await Promise.all([getLatestRuns()]);
+  return { latestRuns: runs };
 };
 
-export type UserMainContextType = AsyncState<{ latestRuns: LatestRuns[]; allTasks: Task[] }>;
+export type UserMainContextType = AsyncState<{ latestRuns: LatestRuns[] }>;
 
 export const UserMainContext = createContext<UserMainContextType>({
   data: undefined,

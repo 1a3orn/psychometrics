@@ -32,6 +32,9 @@ client.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return client(originalRequest);
       } catch (refreshError) {
+        console.log("Error refreshing token", refreshError);
+        localStorage.removeItem(USER_TOKEN_KEY);
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }
