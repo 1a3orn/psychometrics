@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useDualNBack } from "./use-dual-n-back";
 
 interface DualNBackGameProps {
-  n?: number;
+  priorRun?: Array<{ key: string; number: number }>;
   handleCancel: () => void;
   handleSubmit: (values: Record<string, number>) => void;
 }
@@ -14,8 +14,9 @@ const getCorrect = (pressed: boolean, isMatch: boolean) => {
   return "text-gray-500";
 };
 
-export const DualNBack: React.FC<DualNBackGameProps> = ({ n = 2, handleCancel, handleSubmit }) => {
+export const DualNBack: React.FC<DualNBackGameProps> = ({ priorRun, handleCancel, handleSubmit }) => {
   const {
+    nBack,
     curHasVisibleSquare,
     isGameRunning,
     currentIdx,
@@ -24,9 +25,7 @@ export const DualNBack: React.FC<DualNBackGameProps> = ({ n = 2, handleCancel, h
     userLetterResponses,
     pressedPosition,
     pressedLetter,
-  } = useDualNBack({ n, totalTrials: 10, msDelay: 1600, msVisible: 1300 });
-
-  console.log("render");
+  } = useDualNBack({ priorRun, totalTrials: 16, msDelay: 1600, msVisible: 1300 });
 
   const calculateResults = useCallback(() => {
     const results: Record<string, number> = {
@@ -51,7 +50,7 @@ export const DualNBack: React.FC<DualNBackGameProps> = ({ n = 2, handleCancel, h
     }
 
     return {
-      n_back: n,
+      n_back: nBack,
       accuracy_total: results.accuracy_total / trials.length,
       accuracy_position: results.accuracy_position / trials.length,
       accuracy_letter: results.accuracy_letter / trials.length,
@@ -92,6 +91,8 @@ export const DualNBack: React.FC<DualNBackGameProps> = ({ n = 2, handleCancel, h
   return (
     <div className="p-4">
       <div>
+        {/* Title saying what n-back it is */}
+        <h2 className="text-2xl font-bold mb-4">N-Back: {nBack}</h2>
         <div className="flex flex-row justify-center">
           <div className="grid grid-cols-3 gap-4 mb-4 w-64 h-64">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((position) => (

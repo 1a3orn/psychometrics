@@ -18,7 +18,7 @@ export const routeAllKey = async (ctx: Context) => {
     .where("run.user.id = :userId", { userId })
     .innerJoinAndSelect("run.measures", "measures")
     .andWhere("run.key = :key", { key })
-    .orderBy("run.created_at", "DESC")
+    .orderBy("run.created_at", "ASC")
     .getMany();
   ctx.body = allRuns;
 };

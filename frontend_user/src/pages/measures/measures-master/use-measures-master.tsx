@@ -10,6 +10,7 @@ type MSR = Record<string, number>;
 export type UseMeasuresMasterReturn = Omit<UseMeasuresStateReturn, "state"> & {
   state: MMState;
   userData: RunAllKey[];
+  priorRun: Array<{ key: string; number: number }> | undefined;
   handleNextMany: (measures: Record<string, number>) => void;
   handleFinishOne: (measures: Record<string, number>) => void;
 };
@@ -24,6 +25,9 @@ export const useMeasuresMaster = (measure: MeasureDefinition): UseMeasuresMaster
   const { state, handleHome, handleStartOne, handleStartMany, handleAdvanceMany } = useMeasuresState(measure);
 
   const { userData } = useHandleAsync(measure);
+
+  const priorRun =
+    userData.data && userData.data.length > 0 ? userData.data[userData.data.length - 1].measures : undefined;
 
   const handleOneUpload = useCallback(
     async (measures: MSR) => {
@@ -61,6 +65,7 @@ export const useMeasuresMaster = (measure: MeasureDefinition): UseMeasuresMaster
 
   return {
     state: stateSwitched,
+    priorRun,
     userData: userData.data ?? [],
     handleHome,
     handleStartOne,

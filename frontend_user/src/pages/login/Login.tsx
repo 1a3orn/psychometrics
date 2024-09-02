@@ -9,15 +9,15 @@ export const LoginPage = () => {
     <PageLogin>
       <PageLoginContent>
         <CenteredCard title="Login">
-          <form onSubmit={handleLoginClick}>
+          <form onSubmit={handleLoginClick} className="space-y-4">
             <InputField name="username" value={state.username} onChange={handleChange} />
             <InputField name="password" value={state.password} onChange={handleChange} type="password" />
-            <button type="submit">Login</button>
+            <button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4">Login</button>
             <ErrorMessage error={error} />
           </form>
-          <div className="mt-4">
-            <p>Don't have an account?</p>
-            <Link to="/signup">Signup</Link>
+          <div className="mt-4 text-center">
+            <p className="text-gray-700 dark:text-gray-300">Don't have an account?</p>
+            <Link to="/signup" className="text-teal-500 hover:text-teal-600 font-bold">Signup</Link>
           </div>
         </CenteredCard>
       </PageLoginContent>

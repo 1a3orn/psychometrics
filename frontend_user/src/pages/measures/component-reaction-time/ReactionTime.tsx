@@ -1,6 +1,6 @@
 import { MeasureComponent } from "../types";
 import { useReactionTime } from "./use-reaction-time";
-export const ReactionTime: MeasureComponent = ({ handleCancel, handleSubmit }) => {
+export const ReactionTime: MeasureComponent = ({ priorRun, handleCancel, handleSubmit }) => {
   const { stage, reactionTime, handleClick } = useReactionTime();
 
   return (

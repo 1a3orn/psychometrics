@@ -1,7 +1,7 @@
-import React from "react"
+import React from "react";
 
 interface PageProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const PageMain: React.FC<PageProps> = ({ children }) => {
@@ -12,15 +12,21 @@ export const PageMain: React.FC<PageProps> = ({ children }) => {
     >
       {children}
     </div>
-  )
-}
+  );
+};
+
+export const PageMainLoading: React.FC = () => {
+  return (
+    <PageMain>
+      <PageContent>Loading...</PageContent>
+    </PageMain>
+  );
+};
 
 export const PageContent: React.FC<PageProps> = ({ children }) => {
   return (
     <main id="page-content" className="flex max-w-full flex-auto flex-col">
-      <div className="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
-        {children}
-      </div>
+      <div className="container mx-auto p-4 lg:p-8 xl:max-w-7xl">{children}</div>
     </main>
-  )
-}
+  );
+};

@@ -1,14 +1,9 @@
 export type Run = {
   id: string;
+  key: string;
   createdAt: string;
   startedAt: string;
   endedAt: string;
-};
-
-export type Task = {
-  key: string;
-  name: string;
-  measures: string[];
 };
 
 export type Measure = {

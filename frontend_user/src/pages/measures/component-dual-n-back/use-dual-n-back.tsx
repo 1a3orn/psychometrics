@@ -1,10 +1,19 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useSpeechSynthesis, useSequence, useKeyPress, useHandleBoolArray } from "../../../hooks";
 import { generateTrials, Trial } from "./generate-trials";
+import { getNFromPriorRun } from "./get-n-from-prior-run";
 
-export const useDualNBack = (data: { n: number; totalTrials: number; msDelay: number; msVisible: number }) => {
-  const { n, totalTrials, msDelay, msVisible } = data;
+export const useDualNBack = (data: {
+  priorRun?: Array<{ key: string; number: number }>;
+  totalTrials: number;
+  msDelay: number;
+  msVisible: number;
+}) => {
+  const { priorRun, totalTrials, msDelay, msVisible } = data;
   const { playSound } = useSpeechSynthesis();
+
+  // @ts-ignore
+  const nBack = useMemo(() => getNFromPriorRun(priorRun), []);
 
   // Start the game off running
   // This gets set to false when the game is done
@@ -13,7 +22,10 @@ export const useDualNBack = (data: { n: number; totalTrials: number; msDelay: nu
   const [isGameRunning, setIsGameRunning] = useState(true);
 
   // Generate the trials
-  const trials = useMemo(() => generateTrials({ n, totalTrials, percentagePositive: 0.3 }), [n, totalTrials]);
+  const trials = useMemo(
+    () => generateTrials({ n: nBack, totalTrials, percentagePositive: 0.3 }),
+    [nBack, totalTrials]
+  );
 
   const [currentIdx, setCurrentIdx] = useState(-1);
   const [curHasVisibleSquare, setCurHasVisibleSquare] = useState(false);
@@ -56,6 +68,7 @@ export const useDualNBack = (data: { n: number; totalTrials: number; msDelay: nu
   useKeyPress(["l", "L", "k", "K"], respondToLetter);
 
   return {
+    nBack,
     isGameRunning,
     currentIdx,
     pressedPosition,

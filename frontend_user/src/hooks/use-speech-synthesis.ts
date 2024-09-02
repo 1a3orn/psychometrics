@@ -33,7 +33,10 @@ export const useSpeechSynthesis = () => {
       const utterance = new SpeechSynthesisUtterance(character);
 
       // Set a short, fast voice if available
-      const shortVoice = voices.find((voice) => voice.name.includes("Whisper") || voice.name.includes("Zarvox"));
+      let shortVoice = voices.find((voice) => voice.name.includes("Whisper"));
+      if (!shortVoice) {
+        //shortVoice = voices.find((voice) => voice.name.includes("Zarvox"));
+      }
       if (shortVoice) {
         utterance.voice = shortVoice;
       }

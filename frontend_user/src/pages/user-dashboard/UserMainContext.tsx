@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { getLatestRuns, allTasks, LatestRuns, Task } from "../../api";
+import { getLatestRuns, LatestRuns } from "../../api";
 import { useAsync, AsyncState } from "../../hooks";
 
 const request = async () => {

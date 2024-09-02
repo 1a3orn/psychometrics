@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { MeasureComponent } from "../types";
 
-export const Test: MeasureComponent = ({ handleCancel, handleSubmit }) => {
+export const Test: MeasureComponent = ({ priorRun, handleCancel, handleSubmit }) => {
   const [randomNumber, setRandomNumber] = useState<number | null>(null);
 
   const generateRandomNumber = () => {
