@@ -1,9 +1,10 @@
 import { useCallback, useContext, useMemo } from "react";
 import { MeasureDefinition } from "../types";
-import { postUploadMeasure, RunAllKey } from "../../../api/req-user";
+import { RunAllKey } from "../../../api/req-user";
 
 import { MMState, useMainState, getNow, UseMeasuresStateReturn } from "./use-main-state";
 import { MeasuresMasterDataContext } from "./MainDataProvider";
+import { useAuthAwareDataProvider } from "../../../contexts";
 
 type MSR = Record<string, number>;
 
@@ -17,7 +18,7 @@ export type UseMainReturn = Omit<UseMeasuresStateReturn, "state"> & {
 
 export const useMain = (measure: MeasureDefinition): UseMainReturn => {
   const { runs, reload } = useContext(MeasuresMasterDataContext);
-
+  const { fncs } = useAuthAwareDataProvider();
   const { state, handleHome, handleStartOne, handleStartMany, handleAdvanceMany } = useMainState(measure);
 
   const priorRun = useMemo(() => (runs && runs.length > 0 ? runs[runs.length - 1].measures : undefined), [runs]);
@@ -26,7 +27,7 @@ export const useMain = (measure: MeasureDefinition): UseMainReturn => {
     async (measures: MSR) => {
       if (state.type === "home") return;
 
-      await postUploadMeasure({
+      await fncs.postRun({
         key: measure.key,
         startedAt: state.startedAt,
         endedAt: getNow(),

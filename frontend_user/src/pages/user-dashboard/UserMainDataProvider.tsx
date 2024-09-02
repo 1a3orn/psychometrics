@@ -1,20 +1,26 @@
 import { createContext } from "react";
 
-import { getLatestRuns, LatestRuns } from "../../api";
+import { LatestRuns } from "../../api";
 import { useAsync } from "../../hooks";
 import { PageMainLoading } from "../../components";
+import { useAuthAwareDataProvider } from "../../contexts";
 
-export type UserMainDataType = { latestRuns: LatestRuns[]; refresh: () => void; reload: () => void };
+export type UserMainDataType = {
+  latestRuns: LatestRuns[];
+  refresh: () => void;
+  reload: () => void;
+};
 
 export const UserMainDataContext = createContext<UserMainDataType>({} as UserMainDataType);
 
-const delayedGetLatest = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return getLatestRuns();
+const useGetAllRecentRuns = () => {
+  const { fncs } = useAuthAwareDataProvider();
+  return useAsync(fncs.getRunsRecent);
 };
 
 export const UserMainDataProvider = ({ children }: { children: React.ReactNode }) => {
-  const asyncState = useAsync(delayedGetLatest);
+  const asyncState = useGetAllRecentRuns();
+
   if (asyncState.type === "loading") {
     return <PageMainLoading />;
   } else if (asyncState.type === "failure") {

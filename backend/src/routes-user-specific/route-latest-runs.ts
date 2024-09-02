@@ -2,8 +2,6 @@ import { Context } from "koa";
 import { Run } from "../db/entities/entities";
 import { getUserId } from "../auth";
 
-import { TASK_KEYS } from "../shared-automatic";
-
 export const routeLatestRuns = async (ctx: Context) => {
   const userId = await getUserId(ctx);
 
@@ -24,6 +22,6 @@ export const routeLatestRuns = async (ctx: Context) => {
 
   ctx.body = distinctRuns.map((run) => ({
     key: run.key,
-    mostRecentRunDate: run.createdAt,
+    date: run.createdAt,
   }));
 };

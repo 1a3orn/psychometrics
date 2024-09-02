@@ -3,10 +3,10 @@ import { Run, Measure } from "./base-types";
 
 export type LatestRuns = {
   key: string;
-  mostRecentRunDate: string;
+  date: string;
 };
 
-export const getLatestRuns = async () => (await client.get<LatestRuns[]>("/user/latest-runs")).data;
+export const apiGetRunsRecent = async () => (await client.get<LatestRuns[]>("/user/latest-runs")).data;
 
 export type RunUpload = {
   key: string;
@@ -19,7 +19,7 @@ export type RunUpload = {
   }>;
 };
 
-export const postUploadMeasure = async (run: RunUpload) => (await client.post("/user/upload-run", run)).data;
+export const apiPostRun = async (run: RunUpload) => (await client.post("/user/upload-run", run)).data;
 
 export type RunAllKey = Run & {
   task: {
@@ -28,5 +28,5 @@ export type RunAllKey = Run & {
   measures: Array<Measure>;
 };
 
-export const getAllKey = async (key: string): Promise<RunAllKey[]> =>
+export const apiGetRunsAll = async (key: string): Promise<RunAllKey[]> =>
   (await client.get<RunAllKey[]>(`/user/all-key/${key}`)).data;

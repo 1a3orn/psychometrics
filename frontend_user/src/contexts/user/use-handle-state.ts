@@ -30,8 +30,6 @@ export const useHandleState = (): UserContextType => {
 
   const handleSetLoggedIn = useCallback((result: ResultSuccess<{ token: string }>, username: string) => {
     const { token } = result.value;
-    console.log("token", token);
-    console.log("username", username);
     localStorage.setItem(USER_TOKEN_KEY, token);
     setState({ type: "LOGGED_IN", username, token });
     return result;
@@ -49,12 +47,17 @@ export const useHandleState = (): UserContextType => {
     return data;
   }, []);
 
+  const loginAsGuest = useCallback(async () => {
+    localStorage.removeItem(USER_TOKEN_KEY);
+    setState({ type: "GUEST" });
+  }, []);
+
   const logout = async () => {
     localStorage.removeItem(USER_TOKEN_KEY);
-    postLogout().then(() => {
+    postLogout().finally(() => {
       setState({ type: "NOT_LOGGED_IN" });
     });
   };
 
-  return { state, login, signup, logout };
+  return { state, login, signup, logout, loginAsGuest };
 };

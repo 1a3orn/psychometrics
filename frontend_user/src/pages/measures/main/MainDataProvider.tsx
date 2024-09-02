@@ -1,21 +1,30 @@
 import { createContext, useCallback } from "react";
 
-import { getAllKey, RunAllKey } from "../../../api";
+import { RunAllKey } from "../../../api";
 import { useAsync } from "../../../hooks";
 import { PageMainLoading } from "../../../components";
 import { MeasureDefinition } from "../types";
+import { useAuthAwareDataProvider } from "../../../contexts";
 
-export type UserMainDataType = { runs: RunAllKey[]; reload: () => void; refresh: () => void };
+export type UserMainDataType = {
+  runs: RunAllKey[];
+  reload: () => void;
+  refresh: () => void;
+};
 
 export const MeasuresMasterDataContext = createContext<UserMainDataType>({} as UserMainDataType);
 
-const useDelayedGetAllKey = (measure: MeasureDefinition) => {
-  const loadingFnc = useCallback(() => getAllKey(measure.key), [measure.key]);
+const useGetAllRunsForKey = (measureKey: string) => {
+  const { fncs } = useAuthAwareDataProvider();
+
+  const loadingFnc = useCallback(() => fncs.getRunsAll(measureKey), [measureKey]);
+
   return useAsync(loadingFnc);
 };
 
 export const MainDataProvider = ({ children, measure }: { children: React.ReactNode; measure: MeasureDefinition }) => {
-  const asyncState = useDelayedGetAllKey(measure);
+  const asyncState = useGetAllRunsForKey(measure.key);
+
   if (asyncState.type === "loading") {
     return <PageMainLoading />;
   } else if (asyncState.type === "failure") {
