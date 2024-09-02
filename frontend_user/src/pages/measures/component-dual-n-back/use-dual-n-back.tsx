@@ -5,15 +5,18 @@ import { getNFromPriorRun } from "./get-n-from-prior-run";
 
 export const useDualNBack = (data: {
   priorRun?: Array<{ key: string; number: number }>;
-  totalTrials: number;
+  baseTrials: number;
   msDelay: number;
   msVisible: number;
 }) => {
-  const { priorRun, totalTrials, msDelay, msVisible } = data;
+  const { priorRun, baseTrials, msDelay, msVisible } = data;
   const { playSound } = useSpeechSynthesis();
 
   // @ts-ignore
   const nBack = useMemo(() => getNFromPriorRun(priorRun), []);
+
+  // Calculate total trials to be base_trials + n_back
+  const totalTrials = useMemo(() => baseTrials + nBack, [baseTrials, nBack]);
 
   // Start the game off running
   // This gets set to false when the game is done

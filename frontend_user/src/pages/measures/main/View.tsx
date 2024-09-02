@@ -1,9 +1,9 @@
-import { UseMeasuresMasterReturn } from "./use-measures-master";
+import { UseMainReturn } from "./use-main";
 import { MeasureDefinition } from "../types";
 import { PageContent, BasicCard, Button } from "../../../components";
 import { MeasureChartProcessed } from "./components";
 
-export const View = (props: UseMeasuresMasterReturn & { measure: MeasureDefinition }) => {
+export const View = (props: UseMainReturn & { measure: MeasureDefinition }) => {
   const { userData } = props;
 
   const mappedData = userData.map((run) => {

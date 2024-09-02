@@ -10,7 +10,7 @@ export const getNFromPriorRun = (priorRun?: Array<{ key: string; number: number 
   if (!n_back || !accuracy_total) return 2;
 
   if (accuracy_total.number >= 0.9) return n_back.number + 1;
-  if (accuracy_total.number <= 0.7) return n_back.number - 1;
+  if (accuracy_total.number <= 0.75) return n_back.number - 1;
 
   return n_back.number;
 };

@@ -4,6 +4,7 @@ import { Test } from "./component-test";
 import { ReactionTime } from "./component-reaction-time";
 import { Unfinished } from "./component-unfinished";
 import { DualNBack } from "./component-dual-n-back";
+import { ReverseDigitSpan } from "./component-reverse-digit-span";
 import { TASKS } from "../../shared-automatic";
 
 export const ALL_MEASURES: MeasureDefinition[] = [
@@ -24,6 +25,12 @@ export const ALL_MEASURES: MeasureDefinition[] = [
     description: "This is a choosing reaction time measure, it is used to measure the reaction time of the user.",
     numberPerDefault: 5,
     Component: Unfinished,
+  },
+  {
+    matchKey: "reverse_digit_span_audio",
+    description: "asdasd",
+    numberPerDefault: 2,
+    Component: ReverseDigitSpan,
   },
   {
     matchKey: "dual_n_back",

@@ -1,4 +1,5 @@
 import React from "react";
+import { Navbar } from "./navbar";
 
 interface PageProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export const PageMain: React.FC<PageProps> = ({ children }) => {
 export const PageMainLoading: React.FC = () => {
   return (
     <PageMain>
+      <Navbar title="Loading..." />
       <PageContent>Loading...</PageContent>
     </PageMain>
   );

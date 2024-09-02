@@ -1,17 +1,17 @@
 import { PageMain, Navbar, PageContent, List, BasicCard } from "../../components";
 import { ALL_MEASURES } from "../measures/measures";
-import { UserMainProvider } from "./UserMainContext";
+import { UserMainDataProvider } from "./UserMainDataProvider";
 
 export const UserDashbooardPage = () => {
   return (
-    <PageMain>
-      <Navbar title="Main" />
-      <PageContent>
-        <UserMainProvider>
+    <UserMainDataProvider>
+      <PageMain>
+        <Navbar title="Main" />
+        <PageContent>
           <UserDashContent />
-        </UserMainProvider>
-      </PageContent>
-    </PageMain>
+        </PageContent>
+      </PageMain>
+    </UserMainDataProvider>
   );
 };
 

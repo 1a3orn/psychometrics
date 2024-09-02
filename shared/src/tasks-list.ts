@@ -22,6 +22,11 @@ export const TASKS: TaskDecorated[] = [
     ],
   },
   {
+    key: "reverse_digit_span_audio",
+    title: "Reverse Digit Span Audio",
+    measures: [{ key: "span", title: "Span" }],
+  },
+  {
     key: "dual_n_back",
     title: "Dual N-Back",
     measures: [

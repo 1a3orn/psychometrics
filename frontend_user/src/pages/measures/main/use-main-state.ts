@@ -1,7 +1,6 @@
 import { useState, useCallback as uc } from "react";
 import { MeasureDefinition } from "../types";
 
-type MMStateLoading = { type: "loading" };
 type MMHomeState = { type: "home" };
 type MMSingleTest = {
   type: "one";
@@ -14,7 +13,7 @@ type MMManyTest = {
   startedAt: string;
 };
 
-export type MMState = MMHomeState | MMSingleTest | MMManyTest | MMStateLoading;
+export type MMState = MMHomeState | MMSingleTest | MMManyTest;
 
 export type UseMeasuresStateReturn = {
   state: MMState;
@@ -32,7 +31,7 @@ export const isHome = (state: MMState): state is MMHomeState => state.type === "
 
 const INITIAL_STATE: MMState = { type: "home" };
 
-export const useMeasuresState = (measure: MeasureDefinition): UseMeasuresStateReturn => {
+export const useMainState = (measure: MeasureDefinition): UseMeasuresStateReturn => {
   const [state, ss] = useState<MMState>(INITIAL_STATE);
   const handleHome = uc(() => ss({ type: "home" }), []);
   const handleStartOne = uc(() => ss({ type: "one", startedAt: getNow() }), []);
