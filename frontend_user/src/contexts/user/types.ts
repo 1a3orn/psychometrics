@@ -1,4 +1,5 @@
 import { AuthResponse } from "../../api/req-auth";
+import { Result } from "../../shared-automatic";
 
 export interface DecodedToken {
   username: string;
@@ -28,6 +29,6 @@ export type UserContextType = {
   state: LoginState;
   signup: (username: string, password: string, email: string, type?: string) => Promise<AuthResponse>;
   login: (username: string, password: string) => Promise<AuthResponse>;
-  loginAsGuest: () => Promise<void>;
+  loginAsGuest: () => Promise<Result<undefined>>;
   logout: () => Promise<void>;
 };

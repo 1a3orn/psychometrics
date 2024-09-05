@@ -61,6 +61,7 @@ export const useHandleState = (): UserContextType => {
   const loginAsGuest = useCallback(async () => {
     removeToken();
     setState({ type: "GUEST" });
+    return { success: true as const, value: undefined };
   }, [removeToken, setState]);
 
   const logout = useCallback(async () => {

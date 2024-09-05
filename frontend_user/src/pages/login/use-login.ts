@@ -6,7 +6,7 @@ import { useBasicForm } from "../../hooks";
 
 export const useLogin = () => {
   const { state, handleChange } = useBasicForm(["username", "password"]);
-  const { login } = useUser();
+  const { login, loginAsGuest } = useUser();
 
   const [error, setError] = useState<string | null>(null);
 
@@ -25,5 +25,13 @@ export const useLogin = () => {
     [login, state, nav]
   );
 
-  return { state, handleChange, handleLoginClick, error };
+  const handleLoginAsGuest = useCallback(() => {
+    loginAsGuest().then((result) => {
+      if (result.success) {
+        nav("/dashboard");
+      }
+    });
+  }, [loginAsGuest, nav]);
+
+  return { state, handleChange, handleLoginClick, handleLoginAsGuest, error };
 };

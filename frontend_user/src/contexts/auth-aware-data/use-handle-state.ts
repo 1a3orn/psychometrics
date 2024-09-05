@@ -4,6 +4,8 @@ import { apiGetRunsRecent, apiGetRunsAll, apiPostRun } from "../../api/req-user"
 import { AuthAwareDataProviderType, SourceType } from "./types";
 import { useUser } from "../user";
 
+import { localStorageImpl } from "./local-storage-data";
+
 export const useHandleState = (): AuthAwareDataProviderType => {
   const { state } = useUser();
 
@@ -23,11 +25,7 @@ export const useHandleState = (): AuthAwareDataProviderType => {
         postRun: apiPostRun,
       };
     } else {
-      return {
-        getRunsRecent: () => Promise.resolve([]),
-        getRunsAll: () => Promise.resolve([]),
-        postRun: () => Promise.resolve({}),
-      };
+      return localStorageImpl;
     }
   }, [providerType]);
 
