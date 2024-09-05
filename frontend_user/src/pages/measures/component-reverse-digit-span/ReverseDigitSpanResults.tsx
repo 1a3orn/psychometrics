@@ -11,7 +11,7 @@ export const ReverseDigitSpanResults = (props: {
     props.handleSubmit({
       span: maxLength,
     });
-  }, [props.history, props.handleSubmit]);
+  }, [props]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">

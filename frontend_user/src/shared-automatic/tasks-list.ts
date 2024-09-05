@@ -1,4 +1,4 @@
-import { Task, TaskDecorated } from "./types";
+import { TaskDecorated } from "./types";
 
 import { addValidation } from "./tasks-validate";
 

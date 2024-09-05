@@ -10,12 +10,7 @@ const schema = z.object({
   startedAt: z.string(),
   endedAt: z.string(),
   metadata: z.record(z.string(), z.any()),
-  measures: z.array(
-    z.object({
-      key: z.string(),
-      number: z.number(),
-    })
-  ),
+  measures: z.record(z.number()),
 });
 
 export const routeUploadRun = async (ctx: Context) => {
@@ -28,7 +23,7 @@ export const routeUploadRun = async (ctx: Context) => {
   const taskProto = TASKS.find((task) => task.key === body.key);
   if (!taskProto) return ctx.throw(404, "Task not found");
 
-  const validated = taskProto.validateArray(body.measures);
+  const validated = taskProto.validateObject(body.measures);
   if (!validated.success) {
     return ctx.throw(400, validated.error);
   }
@@ -43,10 +38,10 @@ export const routeUploadRun = async (ctx: Context) => {
 
     await transaction.save(run);
 
-    const measures = body.measures.map((measure) => {
+    const measures = Object.keys(body.measures).map((key) => {
       const m = new Measure();
-      m.key = measure.key;
-      m.number = measure.number;
+      m.key = key;
+      m.number = body.measures[key];
       m.run = run;
       return m;
     });

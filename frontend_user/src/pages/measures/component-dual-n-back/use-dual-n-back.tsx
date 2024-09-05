@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useSpeechSynthesis, useSequence, useKeyPress, useHandleBoolArray } from "../../../hooks";
 import { generateTrials, Trial } from "./generate-trials";
 import { getNFromPriorRun } from "./get-n-from-prior-run";
@@ -12,8 +12,7 @@ export const useDualNBack = (data: {
   const { priorRun, baseTrials, msDelay, msVisible } = data;
   const { playSound } = useSpeechSynthesis();
 
-  // @ts-ignore
-  const nBack = useMemo(() => getNFromPriorRun(priorRun), []);
+  const nBack = useMemo(() => getNFromPriorRun(priorRun), [priorRun]);
 
   // Calculate total trials to be base_trials + n_back
   const totalTrials = useMemo(() => baseTrials + nBack, [baseTrials, nBack]);
@@ -49,7 +48,7 @@ export const useDualNBack = (data: {
         }
       }, msVisible);
     },
-    [currentIdx, trials, playSound, msVisible]
+    [playSound, msVisible]
   );
 
   // Advance the trial every msDelay

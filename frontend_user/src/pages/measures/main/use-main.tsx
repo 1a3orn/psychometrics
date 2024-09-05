@@ -1,4 +1,5 @@
 import { useCallback, useContext, useMemo } from "react";
+import { z } from "zod";
 import { MeasureDefinition } from "../types";
 import { RunAllKey } from "../../../api/req-user";
 
@@ -27,17 +28,21 @@ export const useMain = (measure: MeasureDefinition): UseMainReturn => {
     async (measures: MSR) => {
       if (state.type === "home") return;
 
+      const schema = z.record(z.number());
+
+      const validated = schema.parse(measures);
+
       await fncs.postRun({
         key: measure.key,
         startedAt: state.startedAt,
         endedAt: getNow(),
         metadata: {},
-        measures: Object.entries(measures).map(([key, value]) => ({ key, number: value })),
+        measures: validated,
       });
 
       await reload();
     },
-    [state, measure, reload]
+    [state, measure, reload, fncs]
   );
 
   const handleNextMany = useCallback(

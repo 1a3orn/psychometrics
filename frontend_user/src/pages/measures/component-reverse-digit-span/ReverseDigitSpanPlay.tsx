@@ -1,23 +1,9 @@
 import { useState } from "react";
-import { Measure } from "../../../api";
+
 import { useSpeechSynthesis, useEffectOnce } from "../../../hooks";
+import { generateNumberString, reverseString } from "../../../utils";
 
 import { History } from "./types";
-
-const generateString = (length: number) => {
-  return Array(length)
-    .fill(0)
-    .map(() => Math.floor(Math.random() * 10))
-    .join(" ");
-};
-
-const reverseString = (x: string) => {
-  let xx = "";
-  for (let i = x.length - 1; i >= 0; i--) {
-    xx = xx + x[i];
-  }
-  return xx;
-};
 
 export const ReverseDigitSpanPlay = (props: {
   priorRun?: Record<string, number>;
@@ -34,7 +20,7 @@ export const ReverseDigitSpanPlay = (props: {
 
   useEffectOnce(() => {
     setTimeout(() => {
-      const newString = generateString(level);
+      const newString = generateNumberString(level);
       setCurrentString(newString);
       playSound(newString);
       setTimeout(() => {

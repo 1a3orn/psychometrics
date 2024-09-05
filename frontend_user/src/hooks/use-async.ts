@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback } from "react";
+import { useEffectOnce } from "./use-effect-once";
 
 export type AsyncState<T> =
   | { data: T; type: "success"; isRefreshing: boolean }
@@ -21,7 +22,9 @@ export function useAsync<T>(asyncFunction: () => Promise<T>) {
       }
 
       try {
+        console.log("Executing async function");
         const data = await asyncFunction();
+        console.log("Async function executed");
         setState({ data, type: "success", isRefreshing: false });
       } catch (error) {
         setState({
@@ -34,14 +37,9 @@ export function useAsync<T>(asyncFunction: () => Promise<T>) {
     [asyncFunction, state.type]
   );
 
-  const initialLoadRef = useRef(false);
-  useEffect(() => {
-    if (!initialLoadRef.current) {
-      console.log("initialLoadRef.current", initialLoadRef.current);
-      execute(false);
-      initialLoadRef.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffectOnce(() => {
+    console.log("useEffectOnce");
+    execute(true);
   }, []);
 
   const reload = useCallback(() => {

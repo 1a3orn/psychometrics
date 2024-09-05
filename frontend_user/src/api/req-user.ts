@@ -1,5 +1,5 @@
 import { client } from "./client";
-import { Run, Measure } from "./base-types";
+import { Run } from "./base-types";
 
 export type LatestRuns = {
   key: string;
@@ -13,16 +13,15 @@ export type RunUpload = {
   startedAt: string;
   endedAt: string;
   metadata: Record<string, any>;
-  measures: Array<{
-    key: string;
-    number: number;
-  }>;
+  measures: Measures;
 };
+
+type Measures = Record<string, number>;
 
 export const apiPostRun = async (run: RunUpload) => (await client.post("/user/upload-run", run)).data;
 
 export type RunAllKey = Run & {
-  measures: Record<string, number>;
+  measures: Measures;
 };
 
 export const apiGetRunsAll = async (key: string): Promise<RunAllKey[]> =>

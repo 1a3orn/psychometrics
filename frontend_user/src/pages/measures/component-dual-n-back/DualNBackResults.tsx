@@ -25,7 +25,7 @@ export const DualNBackResults: React.FC<{
       accuracy_position: accPo / trials.length,
       accuracy_total: (accLe + accPo) / (trials.length * 2),
     };
-  }, [trials, userPositionResponses, userLetterResponses]);
+  }, [nBack, trials, userPositionResponses, userLetterResponses]);
 
   return (
     <div className="p-4">

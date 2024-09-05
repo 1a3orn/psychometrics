@@ -1,24 +1,28 @@
 import { AuthResponse } from "../../api/req-auth";
 
+export interface DecodedToken {
+  username: string;
+  exp: number;
+}
+
+export type LoadingState = { type: "LOADING" };
+export type NotLogged = { type: "NOT_LOGGED_IN" };
+export type GuestUser = { type: "GUEST" };
+
 export type LoggedInUser = {
   type: "LOGGED_IN";
   username: string;
   token: string;
 };
 
-export type NotLogged = {
-  type: "NOT_LOGGED_IN";
-};
-
-export type LoadingUser = {
-  type: "LOADING";
-};
-
-export type GuestUser = {
-  type: "GUEST";
-};
-
-export type LoginState = LoggedInUser | NotLogged | LoadingUser | GuestUser;
+/* State Transition Diagram
+ *
+ * LOADING -> [NOT_LOGGED_IN, LOGGED_IN]
+ * NOT_LOGGED_IN -> [GUEST, LOGGED_IN]
+ * LOGGED_IN -> [NOT_LOGGED_IN]
+ * GUEST -> [NOT_LOGGED_IN]
+ */
+export type LoginState = LoggedInUser | NotLogged | GuestUser | LoadingState;
 
 export type UserContextType = {
   state: LoginState;

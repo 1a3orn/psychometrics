@@ -9,5 +9,13 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const values = useHandleState();
-  return <UserContext.Provider value={values}>{children}</UserContext.Provider>;
+  if (values.state.type === "LOADING") {
+    return null;
+  } else {
+    return (
+      <UserContext.Provider key={values.state.type} value={values}>
+        {children}
+      </UserContext.Provider>
+    );
+  }
 };
