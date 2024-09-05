@@ -1,12 +1,11 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { LoginState, UserContextType } from "./types";
-import { useTokenManagement } from "./use-token-management";
+import { postLogin, postSignup, postLogout } from "../../api";
 import { ResultSuccess } from "../../shared-automatic";
 
-import { postLogin, postSignup, postLogout } from "../../api";
-
-export const USER_TOKEN_KEY = "user_token";
+import { LoginState, UserContextType } from "./types";
+import { useTokenManagement } from "./use-token-management";
+import { useTokenManagementGuest } from "./use-token-management-guest";
 
 const NOT_LOGGED_IN: LoginState = { type: "NOT_LOGGED_IN" };
 
@@ -19,25 +18,37 @@ const NOT_LOGGED_IN: LoginState = { type: "NOT_LOGGED_IN" };
  */
 
 export const useHandleState = (): UserContextType => {
-  const { validateToken, getToken, setToken, removeToken } = useTokenManagement();
+  const { validateToken, getTokenAuth, setTokenAuth, removeTokenAuth } = useTokenManagement();
+
+  const { getTokenGuest, setTokenGuest, removeTokenGuest } = useTokenManagementGuest();
   const [state, setState] = useState<LoginState>({ type: "LOADING" });
 
   // Use useEffect to check if the user is logged in
   // We do this just once, when the component is mounted
   useEffect(() => {
     if (state.type === "LOADING") {
-      const token = getToken();
-      setState(token ? validateToken(token) : NOT_LOGGED_IN);
+      const token = getTokenAuth();
+      if (token) {
+        setState(validateToken(token));
+      } else {
+        const tokenGuest = getTokenGuest();
+        if (tokenGuest) {
+          setState({ type: "GUEST" });
+        } else {
+          setState(NOT_LOGGED_IN);
+        }
+      }
     }
-  }, [state, validateToken, getToken]);
+  }, [state, validateToken, getTokenAuth]);
 
   const handleSetLoggedIn = useCallback(
     (result: ResultSuccess<{ token: string }>, username: string) => {
-      setToken(result.value.token);
+      setTokenAuth(result.value.token);
+      removeTokenGuest();
       setState({ type: "LOGGED_IN", username, token: result.value.token });
       return result;
     },
-    [setToken, setState]
+    [setTokenAuth, setState]
   );
 
   const signup = useCallback(
@@ -59,17 +70,19 @@ export const useHandleState = (): UserContextType => {
   );
 
   const loginAsGuest = useCallback(async () => {
-    removeToken();
+    removeTokenAuth();
+    setTokenGuest();
     setState({ type: "GUEST" });
     return { success: true as const, value: undefined };
-  }, [removeToken, setState]);
+  }, [removeTokenAuth, setState, removeTokenGuest]);
 
   const logout = useCallback(async () => {
-    removeToken();
+    removeTokenAuth();
+    removeTokenGuest();
     postLogout().finally(() => {
       setState(NOT_LOGGED_IN);
     });
-  }, [removeToken, setState]);
+  }, [removeTokenAuth, setState, removeTokenGuest]);
 
   return { state, login, signup, logout, loginAsGuest };
 };

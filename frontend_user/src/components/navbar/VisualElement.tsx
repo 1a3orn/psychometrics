@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@headlessui/react";
+
+import { ButtonDark } from "../Button";
 
 interface NavbarProps {
   title: string;
@@ -17,6 +19,35 @@ interface NavbarProps {
   onClickSignupFromGuest: () => void;
 }
 
+const SignupButton: React.FC<{ onClick: () => void; className?: string }> = ({ onClick, className }) => (
+  <button
+    className={`items-center px-2.5 py-1.5 text-xs font-medium bg-white text-teal-700 hover:bg-teal-100 transition-colors duration-200 ${className}`}
+    onClick={onClick}
+  >
+    Signup Here
+  </button>
+);
+
+const DropdownMenuItem: React.FC<{ onClick: () => void; icon: React.ReactNode; label: string }> = ({
+  onClick,
+  icon,
+  label,
+}) => (
+  <MenuItem>
+    {({ focus }) => (
+      <button
+        onClick={onClick}
+        className={`group flex items-center justify-between gap-2 px-2.5 py-2 text-sm font-medium ${
+          focus ? "bg-teal-100 text-teal-800" : "text-gray-700 hover:bg-teal-50 hover:text-teal-800"
+        }`}
+      >
+        {icon}
+        <span className="grow">{label}</span>
+      </button>
+    )}
+  </MenuItem>
+);
+
 export const VisualElement: React.FC<NavbarProps> = ({
   title,
   username,
@@ -27,9 +58,10 @@ export const VisualElement: React.FC<NavbarProps> = ({
   onClickAccount,
   onClickSignupFromGuest,
 }) => {
+  const navigate = useNavigate();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   return (
-    <header id="page-header" className="z-1 flex flex-none items-center bg-gray-800 shadow-sm">
+    <header id="page-header" className="z-1 flex flex-none items-center bg-teal-500 shadow-sm">
       <div className="container mx-auto px-4 lg:px-8 xl:max-w-7xl">
         <div className="flex justify-between py-4">
           {/* Left Section */}
@@ -39,12 +71,9 @@ export const VisualElement: React.FC<NavbarProps> = ({
             {/* Desktop Navigation */}
             <nav className="hidden items-center gap-2 lg:flex">
               {links.map((link) => (
-                <Link
-                  to={link.href}
-                  className="group flex items-center gap-2 rounded-lg border border-transparent bg-gray-700 px-3 py-2 text-sm font-medium text-white"
-                >
+                <ButtonDark key={link.href} onClick={() => navigate(link.href)}>
                   <span>{link.label}</span>
-                </Link>
+                </ButtonDark>
               ))}
             </nav>
             {/* END Desktop Navigation */}
@@ -54,17 +83,10 @@ export const VisualElement: React.FC<NavbarProps> = ({
           {/* Right Section */}
           <div className="flex items-center gap-2">
             {/* User Dropdown */}
-            {isGuest && (
-              <button
-                className="hidden lg:inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 "
-                onClick={onClickSignupFromGuest}
-              >
-                Signup Here
-              </button>
-            )}
+            {isGuest && <SignupButton onClick={onClickSignupFromGuest} className="hidden lg:inline-flex" />}
             <Menu as="div" className="relative inline-block gap-2">
               {/* Dropdown Toggle Button */}
-              <MenuButton className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-semibold leading-5 text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-sm focus:ring focus:ring-gray-600/40 active:border-gray-700 active:shadow-none">
+              <MenuButton className="inline-flex items-center justify-center gap-2 bg-teal-600 px-3 py-2 text-sm font-semibold leading-5 text-white hover:bg-teal-700">
                 <svg
                   className="hi-mini hi-user-circle inline-block size-5 sm:hidden"
                   xmlns="http://www.w3.org/2000/svg"
@@ -106,94 +128,69 @@ export const VisualElement: React.FC<NavbarProps> = ({
               >
                 <MenuItems
                   modal={false}
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-lg shadow-xl focus:outline-none dark:shadow-gray-900"
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right shadow-xl focus:outline-none"
                 >
-                  <div className="divide-y divide-gray-100 rounded-lg bg-white ring-1 ring-black/5 dark:divide-gray-700 dark:bg-gray-800 dark:ring-gray-700">
+                  <div className="bg-white">
                     <div className="space-y-1 p-2.5">
-                      {/* eslint-disable-next-line */}
-                      <MenuItem>
-                        {({ focus }) => (
-                          <button
-                            onClick={onClickAccount}
-                            className={`group flex items-center justify-between gap-2 rounded-lg border border-transparent px-2.5 py-2 text-sm font-medium ${
-                              focus
-                                ? "bg-blue-50 text-blue-800 dark:border-transparent dark:bg-gray-700/75 dark:text-white"
-                                : "text-gray-700 hover:bg-blue-50 hover:text-blue-800 active:border-blue-100 dark:text-gray-200 dark:hover:bg-gray-700/75 dark:hover:text-white dark:active:border-gray-600"
-                            }`}
+                      <DropdownMenuItem
+                        onClick={onClickAccount}
+                        icon={
+                          <svg
+                            className="hi-mini hi-user-circle inline-block size-5 flex-none opacity-25 group-hover:opacity-50"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
                           >
-                            <svg
-                              className="hi-mini hi-user-circle inline-block size-5 flex-none opacity-25 group-hover:opacity-50"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-5.5-2.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zM10 12a5.99 5.99 0 00-4.793 2.39A6.483 6.483 0 0010 16.5a6.483 6.483 0 004.793-2.11A5.99 5.99 0 0010 12z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span className="grow">Account</span>
-                          </button>
-                        )}
-                      </MenuItem>
-                      <MenuItem>
-                        {({ focus }) => (
-                          <button
-                            onClick={onClickSettings}
-                            className={`group flex items-center justify-between gap-2 rounded-lg border border-transparent px-2.5 py-2 text-sm font-medium ${
-                              focus
-                                ? "bg-blue-50 text-blue-800 dark:border-transparent dark:bg-gray-700/75 dark:text-white"
-                                : "text-gray-700 hover:bg-blue-50 hover:text-blue-800 active:border-blue-100 dark:text-gray-200 dark:hover:bg-gray-700/75 dark:hover:text-white dark:active:border-gray-600"
-                            }`}
+                            <path
+                              fillRule="evenodd"
+                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-5.5-2.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zM10 12a5.99 5.99 0 00-4.793 2.39A6.483 6.483 0 0010 16.5a6.483 6.483 0 004.793-2.11A5.99 5.99 0 0010 12z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        }
+                        label="Account"
+                      />
+                      <DropdownMenuItem
+                        onClick={onClickSettings}
+                        icon={
+                          <svg
+                            className="hi-mini hi-cog-6-tooth inline-block size-5 flex-none opacity-25 group-hover:opacity-50"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
                           >
-                            <svg
-                              className="hi-mini hi-cog-6-tooth inline-block size-5 flex-none opacity-25 group-hover:opacity-50"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span className="grow">Settings</span>
-                          </button>
-                        )}
-                      </MenuItem>
+                            <path
+                              fillRule="evenodd"
+                              d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        }
+                        label="Settings"
+                      />
                     </div>
                     <div className="space-y-1 p-2.5">
-                      <MenuItem>
-                        {({ focus }) => (
-                          <button
-                            onClick={onClickSignOut}
-                            className={`group flex items-center justify-between gap-2 rounded-lg border border-transparent px-2.5 py-2 text-sm font-medium ${
-                              focus
-                                ? "bg-blue-50 text-blue-800 dark:border-transparent dark:bg-gray-700/75 dark:text-white"
-                                : "text-gray-700 hover:bg-blue-50 hover:text-blue-800 active:border-blue-100 dark:text-gray-200 dark:hover:bg-gray-700/75 dark:hover:text-white dark:active:border-gray-600"
-                            }`}
+                      <DropdownMenuItem
+                        onClick={onClickSignOut}
+                        icon={
+                          <svg
+                            className="hi-mini hi-lock-closed inline-block size-5 flex-none opacity-25 group-hover:opacity-50"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
                           >
-                            <svg
-                              className="hi-mini hi-lock-closed inline-block size-5 flex-none opacity-25 group-hover:opacity-50"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span className="grow">Sign out</span>
-                          </button>
-                        )}
-                      </MenuItem>
+                            <path
+                              fillRule="evenodd"
+                              d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        }
+                        label="Sign out"
+                      />
                     </div>
                   </div>
                 </MenuItems>
@@ -207,7 +204,7 @@ export const VisualElement: React.FC<NavbarProps> = ({
               <button
                 onClick={() => setMobileNavOpen(!mobileNavOpen)}
                 type="button"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-semibold leading-5 text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-sm focus:ring focus:ring-gray-600/40 active:border-gray-700 active:shadow-none"
+                className="inline-flex items-center justify-center gap-2 bg-teal-600 px-3 py-2 text-sm font-semibold leading-5 text-white hover:bg-teal-700"
               >
                 <svg
                   fill="currentColor"
@@ -230,22 +227,12 @@ export const VisualElement: React.FC<NavbarProps> = ({
 
         {/* Mobile Navigation */}
         <div className={`lg:hidden ${mobileNavOpen ? "" : "hidden"}`}>
-          <nav className="flex flex-col gap-2 border-t border-gray-700 py-4">
-            {isGuest && (
-              <button
-                onClick={onClickSignupFromGuest}
-                className="flex items-center justify-center gap-2 rounded-lg border border-transparent bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors duration-200"
-              >
-                Signup Here
-              </button>
-            )}
+          <nav className="flex flex-col gap-2 border-t border-teal-600 py-4">
+            {isGuest && <SignupButton onClick={onClickSignupFromGuest} className="flex justify-center" />}
             {links.map((link) => (
-              <Link
-                to={link.href}
-                className="group flex items-center gap-2 rounded-lg border border-transparent bg-gray-700/75 px-3 py-2 text-sm font-semibold text-white"
-              >
+              <ButtonDark key={link.href} onClick={() => navigate(link.href)}>
                 <span>{link.label}</span>
-              </Link>
+              </ButtonDark>
             ))}
           </nav>
         </div>

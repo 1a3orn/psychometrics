@@ -5,9 +5,9 @@ import { LoginState, DecodedToken } from "./types";
 const USER_TOKEN_KEY = "user_token";
 const NOT_LOGGED_IN: LoginState = { type: "NOT_LOGGED_IN" };
 
-const getToken = () => localStorage.getItem(USER_TOKEN_KEY);
-const setToken = (token: string) => localStorage.setItem(USER_TOKEN_KEY, token);
-const removeToken = () => localStorage.removeItem(USER_TOKEN_KEY);
+export const getTokenAuth = () => localStorage.getItem(USER_TOKEN_KEY);
+export const setTokenAuth = (token: string) => localStorage.setItem(USER_TOKEN_KEY, token);
+export const removeTokenAuth = () => localStorage.removeItem(USER_TOKEN_KEY);
 
 export const useTokenManagement = () => {
   const validateToken = useCallback((token: string): LoginState => {
@@ -33,5 +33,5 @@ export const useTokenManagement = () => {
     }
   }, []);
 
-  return { validateToken, getToken, setToken, removeToken };
+  return { validateToken, getTokenAuth, setTokenAuth, removeTokenAuth };
 };

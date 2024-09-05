@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { Result } from "../shared-automatic";
-import { USER_TOKEN_KEY } from "../contexts/user/use-handle-state";
+import { getTokenAuth, setTokenAuth, removeTokenAuth } from "../contexts/user/use-token-management";
 
 export const client = axios.create({
   baseURL: "/api",
@@ -9,7 +9,7 @@ export const client = axios.create({
 
 client.interceptors.request.use(
   function (config) {
-    const token = localStorage.getItem(USER_TOKEN_KEY);
+    const token = getTokenAuth();
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -27,7 +27,7 @@ client.interceptors.response.use(
 
     const handleFailure = () => {
       console.log("handleFailure", error.response.data);
-      localStorage.removeItem(USER_TOKEN_KEY);
+      removeTokenAuth();
       window.location.href = "/login";
       return Promise.resolve();
     };
@@ -38,7 +38,7 @@ client.interceptors.response.use(
         const response = await axios.post<Result<{ token: string }>>("/api/auth/refresh");
         if (response.data.success) {
           const newToken = response.data.value.token;
-          localStorage.setItem(USER_TOKEN_KEY, newToken);
+          setTokenAuth(newToken);
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
           return client(originalRequest);
         } else {
