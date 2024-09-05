@@ -1,40 +1,35 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-import {
-  Menu,
-  MenuButton,
-  MenuItems,
-  MenuItem,
-  Transition,
-} from "@headlessui/react"
+import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@headlessui/react";
 
 interface NavbarProps {
-  title: string
-  username: string
+  title: string;
+  username: string;
+  isGuest: boolean;
   links: {
-    label: string
-    href: string
-  }[]
-  onClickAccount: () => void
-  onClickSettings: () => void
-  onClickSignOut: () => void
+    label: string;
+    href: string;
+  }[];
+  onClickAccount: () => void;
+  onClickSettings: () => void;
+  onClickSignOut: () => void;
+  onClickSignupFromGuest: () => void;
 }
 
 export const VisualElement: React.FC<NavbarProps> = ({
   title,
   username,
+  isGuest,
   links,
   onClickSignOut,
   onClickSettings,
   onClickAccount,
+  onClickSignupFromGuest,
 }) => {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   return (
-    <header
-      id="page-header"
-      className="z-1 flex flex-none items-center bg-gray-800 shadow-sm"
-    >
+    <header id="page-header" className="z-1 flex flex-none items-center bg-gray-800 shadow-sm">
       <div className="container mx-auto px-4 lg:px-8 xl:max-w-7xl">
         <div className="flex justify-between py-4">
           {/* Left Section */}
@@ -59,7 +54,15 @@ export const VisualElement: React.FC<NavbarProps> = ({
           {/* Right Section */}
           <div className="flex items-center gap-2">
             {/* User Dropdown */}
-            <Menu as="div" className="relative inline-block">
+            {isGuest && (
+              <button
+                className="hidden lg:inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 "
+                onClick={onClickSignupFromGuest}
+              >
+                Signup Here
+              </button>
+            )}
+            <Menu as="div" className="relative inline-block gap-2">
               {/* Dropdown Toggle Button */}
               <MenuButton className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-semibold leading-5 text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-sm focus:ring focus:ring-gray-600/40 active:border-gray-700 active:shadow-none">
                 <svg
@@ -228,6 +231,14 @@ export const VisualElement: React.FC<NavbarProps> = ({
         {/* Mobile Navigation */}
         <div className={`lg:hidden ${mobileNavOpen ? "" : "hidden"}`}>
           <nav className="flex flex-col gap-2 border-t border-gray-700 py-4">
+            {isGuest && (
+              <button
+                onClick={onClickSignupFromGuest}
+                className="flex items-center justify-center gap-2 rounded-lg border border-transparent bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors duration-200"
+              >
+                Signup Here
+              </button>
+            )}
             {links.map((link) => (
               <Link
                 to={link.href}
@@ -241,13 +252,13 @@ export const VisualElement: React.FC<NavbarProps> = ({
         {/* END Mobile Navigation */}
       </div>
     </header>
-  )
-}
+  );
+};
 
 function Logo() {
   return (
     <span className="group inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-100 hover:text-gray-300">
       <span>CoYD</span>
     </span>
-  )
+  );
 }

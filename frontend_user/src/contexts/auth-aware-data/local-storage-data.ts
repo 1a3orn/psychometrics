@@ -49,7 +49,6 @@ export const localStorageImpl: AllFncs = {
         uniqueLatestRuns.set(run.key, run);
       }
     });
-    console.log("uniqueLatestRuns", Array.from(uniqueLatestRuns.values()));
     // Convert the Map back to an array
     return Array.from(uniqueLatestRuns.values());
   },
