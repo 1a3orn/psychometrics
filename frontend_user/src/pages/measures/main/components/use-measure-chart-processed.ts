@@ -73,7 +73,11 @@ export const useChartData = (
   chunkingOption: ChunkingOption
 ) => {
   return useMemo(() => {
-    if (chunkingOption === "none") return data;
+    if (chunkingOption === "none")
+      return data.map((item, index) => ({
+        ...item,
+        index,
+      }));
 
     const chunkSize = getChunkSize(chunkingOption);
     const chunkedData = chunkData(data, xAxisDataKey, yAxisDataKeys, chunkSize);

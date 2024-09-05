@@ -1,7 +1,7 @@
 import { TaskDecorated } from "../../shared-automatic/types";
 
 export type MeasureComponent = React.ComponentType<{
-  priorRun?: Array<{ key: string; number: number }>;
+  priorRun?: Record<string, number>;
   handleCancel: () => void;
   handleSubmit: (values: Record<string, number>) => void;
 }>;

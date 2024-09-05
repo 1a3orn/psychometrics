@@ -1,16 +1,16 @@
-export const getNFromPriorRun = (priorRun?: Array<{ key: string; number: number }>) => {
+export const getNFromPriorRun = (priorRun?: Record<string, number>) => {
   if (!priorRun) return 2;
 
   if (typeof priorRun !== "object") return 2;
 
   // Get n_back and accuracy_total
-  const n_back = priorRun.find((item) => item.key === "n_back");
-  const accuracy_total = priorRun.find((item) => item.key === "accuracy_total");
+  const n_back = priorRun.n_back;
+  const accuracy_total = priorRun.accuracy_total;
 
   if (!n_back || !accuracy_total) return 2;
 
-  if (accuracy_total.number >= 0.9) return n_back.number + 1;
-  if (accuracy_total.number <= 0.75) return n_back.number - 1;
+  if (accuracy_total >= 0.9) return n_back + 1;
+  if (accuracy_total <= 0.75) return n_back - 1;
 
-  return n_back.number;
+  return n_back;
 };

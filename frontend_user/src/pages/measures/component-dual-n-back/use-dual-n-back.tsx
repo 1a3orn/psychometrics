@@ -4,7 +4,7 @@ import { generateTrials, Trial } from "./generate-trials";
 import { getNFromPriorRun } from "./get-n-from-prior-run";
 
 export const useDualNBack = (data: {
-  priorRun?: Array<{ key: string; number: number }>;
+  priorRun?: Record<string, number>;
   baseTrials: number;
   msDelay: number;
   msVisible: number;

@@ -22,10 +22,7 @@ export type RunUpload = {
 export const apiPostRun = async (run: RunUpload) => (await client.post("/user/upload-run", run)).data;
 
 export type RunAllKey = Run & {
-  task: {
-    key: string;
-  };
-  measures: Array<Measure>;
+  measures: Record<string, number>;
 };
 
 export const apiGetRunsAll = async (key: string): Promise<RunAllKey[]> =>

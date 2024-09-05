@@ -11,7 +11,7 @@ type MSR = Record<string, number>;
 export type UseMainReturn = Omit<UseMeasuresStateReturn, "state"> & {
   state: MMState;
   userData: RunAllKey[];
-  priorRun: Array<{ key: string; number: number }> | undefined;
+  priorRun: Record<string, number> | undefined;
   handleNextMany: (measures: Record<string, number>) => void;
   handleFinishOne: (measures: Record<string, number>) => void;
 };

@@ -19,7 +19,10 @@ const reverseString = (x: string) => {
   return xx;
 };
 
-export const ReverseDigitSpanPlay = (props: { priorRun?: Measure[]; handleFinish: (history: History[]) => void }) => {
+export const ReverseDigitSpanPlay = (props: {
+  priorRun?: Record<string, number>;
+  handleFinish: (history: History[]) => void;
+}) => {
   const [phase, setPhase] = useState<"playing" | "waiting" | "success">("playing");
 
   const [history, setHistory] = useState<History[]>([]);

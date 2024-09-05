@@ -8,8 +8,8 @@ export const View = (props: UseMainReturn & { measure: MeasureDefinition }) => {
 
   const mappedData = userData.map((run) => {
     const base: Record<string, number | string> = { startedAt: new Date(run.startedAt).getTime() };
-    run.measures.forEach((measure) => {
-      base[measure.key] = measure.number;
+    Object.keys(run.measures).forEach((key) => {
+      base[key] = run.measures[key];
     });
     return base;
   });

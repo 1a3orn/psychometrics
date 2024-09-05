@@ -49,7 +49,12 @@ export const MeasureChart: React.FC<MeasureChartProps> = ({ data, xAxisDataKey, 
   return (
     <ResponsiveContainer width={"100%"} height={"100%"}>
       <LineChart data={data}>
-        <XAxis dataKey={xAxisDataKey} tickFormatter={dataFormatter} type="number" domain={["dataMin", "dataMax"]} />
+        <XAxis
+          dataKey={xAxisDataKey}
+          tickFormatter={xAxisDataKey === "index" ? undefined : dataFormatter}
+          type="number"
+          domain={["dataMin", "dataMax"]}
+        />
         <YAxis domain={yAxisDomain} />
         <Tooltip />
         <Legend />

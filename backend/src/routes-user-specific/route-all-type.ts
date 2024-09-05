@@ -1,8 +1,10 @@
 import { Context } from "koa";
 import { Run } from "../db/entities/entities";
 import { getUserId } from "../auth";
-
+import { runToRecord } from "./run-to-record";
 import { TASKS } from "../shared-automatic";
+
+const isNotNull = <T>(value: T | null): value is T => value !== null;
 
 export const routeAllKey = async (ctx: Context) => {
   const userId = await getUserId(ctx);
@@ -20,5 +22,6 @@ export const routeAllKey = async (ctx: Context) => {
     .andWhere("run.key = :key", { key })
     .orderBy("run.created_at", "ASC")
     .getMany();
-  ctx.body = allRuns;
+
+  ctx.body = allRuns.map(runToRecord).filter(isNotNull);
 };
