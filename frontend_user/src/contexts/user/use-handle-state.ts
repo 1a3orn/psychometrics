@@ -69,7 +69,7 @@ export const useHandleState = (): UserContextType => {
     [handleSetLoggedIn]
   );
 
-  const loginAsGuest = useCallback(async () => {
+  const loginAsGuest = useCallback(() => {
     removeTokenAuth();
     setTokenGuest();
     setState({ type: "GUEST" });
@@ -79,7 +79,7 @@ export const useHandleState = (): UserContextType => {
   const logout = useCallback(async () => {
     removeTokenAuth();
     removeTokenGuest();
-    postLogout().finally(() => {
+    await postLogout().finally(() => {
       setState(NOT_LOGGED_IN);
     });
   }, [removeTokenAuth, setState, removeTokenGuest]);

@@ -1,23 +1,14 @@
 import { Context } from "koa";
 import { Run, Measure, User } from "../db/entities/entities";
-import { TASKS } from "../shared-automatic";
-import { z } from "zod";
+import { schemaRun, TASKS } from "../shared-automatic";
 import { getUserId } from "../auth";
 import { getAppDataSource } from "../db/add-datasource";
-
-const schema = z.object({
-  key: z.string(),
-  startedAt: z.string(),
-  endedAt: z.string(),
-  metadata: z.record(z.string(), z.any()),
-  measures: z.record(z.number()),
-});
 
 export const routeUploadRun = async (ctx: Context) => {
   const dataSource = getAppDataSource(ctx);
 
   const userId = await getUserId(ctx);
-  const body = schema.parse(ctx.request.body);
+  const body = schemaRun.parse(ctx.request.body);
 
   // 1. Get
   const taskProto = TASKS.find((task) => task.key === body.key);

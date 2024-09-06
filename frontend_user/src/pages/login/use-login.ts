@@ -25,12 +25,19 @@ export const useLogin = () => {
     [login, state, nav]
   );
 
-  const handleLoginAsGuest = useCallback(() => {
-    loginAsGuest().then((result) => {
+  const handleLoginAsGuest = useCallback(async () => {
+    try {
+      const result = loginAsGuest();
       if (result.success) {
+        console.log("navigating to dashboard");
         nav("/dashboard");
+      } else {
+        // Handle error if needed
+        console.error("Guest login failed:", result.error);
       }
-    });
+    } catch (error) {
+      console.error("Error during guest login:", error);
+    }
   }, [loginAsGuest, nav]);
 
   return { state, handleChange, handleLoginClick, handleLoginAsGuest, error };

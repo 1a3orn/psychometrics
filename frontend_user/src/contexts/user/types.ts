@@ -29,6 +29,6 @@ export type UserContextType = {
   state: LoginState;
   signup: (username: string, password: string, email: string, type?: string) => Promise<AuthResponse>;
   login: (username: string, password: string) => Promise<AuthResponse>;
-  loginAsGuest: () => Promise<Result<undefined>>;
+  loginAsGuest: () => Result<undefined>;
   logout: () => Promise<void>;
 };

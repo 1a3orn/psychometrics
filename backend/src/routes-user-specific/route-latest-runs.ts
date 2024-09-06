@@ -1,4 +1,5 @@
 import { Context } from "koa";
+import { schemaLatestRuns } from "../shared-automatic";
 import { Run } from "../db/entities/entities";
 import { getUserId } from "../auth";
 
@@ -20,8 +21,10 @@ export const routeLatestRuns = async (ctx: Context) => {
     .setParameter("user_id", userId)
     .getMany();
 
-  ctx.body = distinctRuns.map((run) => ({
-    key: run.key,
-    date: run.createdAt,
-  }));
+  ctx.body = schemaLatestRuns.parse(
+    distinctRuns.map((run) => ({
+      key: run.key,
+      date: run.createdAt.toISOString(),
+    }))
+  );
 };

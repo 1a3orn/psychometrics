@@ -3,13 +3,13 @@ import { Run, Measure } from "../db/entities/entities";
 type RunView = {
   id: string;
   key: string;
-  startedAt: Date;
-  endedAt: Date;
+  startedAt: string;
+  endedAt: string;
   metadata: Record<string, any>;
   measures: Record<string, number>;
 };
 
-export const runToRecord = (run: Run & { measures?: Measure[] }): RunView | null => {
+export const dbRunToRun = (run: Run & { measures?: Measure[] }): RunView | null => {
   if (!run.measures) {
     console.error("Run has no measures", run);
     return null;
@@ -22,6 +22,8 @@ export const runToRecord = (run: Run & { measures?: Measure[] }): RunView | null
 
   return {
     ...run,
+    startedAt: run.createdAt.toISOString(),
+    endedAt: run.endedAt?.toISOString(),
     measures: measuresAsObject,
   };
 };

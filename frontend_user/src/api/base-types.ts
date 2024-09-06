@@ -1,5 +1,5 @@
 export type Run = {
-  id: string;
+  id?: string | null;
   key: string;
   startedAt: string;
   endedAt: string;

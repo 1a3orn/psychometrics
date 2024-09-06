@@ -1,25 +1,13 @@
 import { z } from "zod";
 
+import { schemaLatestRuns, schemaRun } from "../../shared-automatic";
+
 import { LatestRuns, RunAllKey, RunUpload } from "../../api";
 import { AllFncs } from "./types";
 
 const STORAGE_KEY = "localRuns";
 
-const MeasuresSchema = z.record(z.number());
-
-const RunUploadSchema = z.object({
-  key: z.string(),
-  startedAt: z.string(),
-  endedAt: z.string(),
-  metadata: z.record(z.any()),
-  measures: MeasuresSchema,
-});
-
-const RunSchema = RunUploadSchema.extend({
-  id: z.string(),
-});
-
-const StorageSchema = z.record(z.array(RunSchema));
+const StorageSchema = z.record(z.array(schemaRun));
 
 function getStorageData(): Record<string, RunAllKey[]> {
   const data = localStorage.getItem(STORAGE_KEY);
@@ -50,7 +38,8 @@ export const localStorageImpl: AllFncs = {
       }
     });
     // Convert the Map back to an array
-    return Array.from(uniqueLatestRuns.values());
+    const values = Array.from(uniqueLatestRuns.values());
+    return schemaLatestRuns.parse(values);
   },
 
   getRunsAll: async (key: string) => {
@@ -60,7 +49,7 @@ export const localStorageImpl: AllFncs = {
   },
 
   postRun: async (run: RunUpload) => {
-    const validatedRun = RunUploadSchema.parse(run);
+    const validatedRun = schemaRun.parse(run);
     const allRuns = getStorageData();
     const newRun: RunAllKey = {
       ...validatedRun,

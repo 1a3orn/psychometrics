@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import {
   LoginPage,
   LoginSignupPage,
@@ -14,7 +14,6 @@ export const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/measures/*" element={<MeasuresRouter />} />
         <Route path="/signup" element={<LoginSignupPage />} />
@@ -22,6 +21,7 @@ export const AppRouter = () => {
         <Route path="/analytics" element={<UserAnalyticsPage />} />
         <Route path="/account" element={<UserAccountPage />} />
         <Route path="/settings" element={<UserSettingsPage />} />
+        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

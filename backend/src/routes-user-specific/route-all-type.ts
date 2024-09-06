@@ -1,8 +1,8 @@
 import { Context } from "koa";
 import { Run } from "../db/entities/entities";
+import { TASKS, schemaRuns } from "../shared-automatic";
 import { getUserId } from "../auth";
-import { runToRecord } from "./run-to-record";
-import { TASKS } from "../shared-automatic";
+import { dbRunToRun } from "./run-to-record";
 
 const isNotNull = <T>(value: T | null): value is T => value !== null;
 
@@ -23,5 +23,7 @@ export const routeAllKey = async (ctx: Context) => {
     .orderBy("run.created_at", "ASC")
     .getMany();
 
-  ctx.body = allRuns.map(runToRecord).filter(isNotNull);
+  const formattedRuns = allRuns.map(dbRunToRun).filter(isNotNull);
+
+  ctx.body = schemaRuns.parse(formattedRuns);
 };

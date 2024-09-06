@@ -9,6 +9,7 @@ export type LatestRuns = {
 export const apiGetRunsRecent = async () => (await client.get<LatestRuns[]>("/user/latest-runs")).data;
 
 export type RunUpload = {
+  id?: string | null;
   key: string;
   startedAt: string;
   endedAt: string;

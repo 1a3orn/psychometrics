@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 interface ButtonProps {
   children: React.ReactNode;
   onClick: () => void;
@@ -9,8 +9,8 @@ interface ButtonProps {
 
 export const Button: React.FC<ButtonProps> = ({ children, onClick, outline = false, className = "" }) => {
   const baseClasses = "px-4 py-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
-  const filledClasses = "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500";
-  const outlineClasses = "bg-transparent text-blue-500 border border-blue-500 hover:bg-blue-100 focus:ring-blue-500";
+  const filledClasses = "bg-teal-500 text-white hover:bg-teal-600 focus:ring-teal-500";
+  const outlineClasses = "bg-transparent text-teal-500 border border-teal-500 hover:bg-teal-100 focus:ring-teal-500";
 
   const buttonClasses = `${baseClasses} ${outline ? outlineClasses : filledClasses} ${className}`;
 
@@ -18,6 +18,23 @@ export const Button: React.FC<ButtonProps> = ({ children, onClick, outline = fal
     <button className={buttonClasses} onClick={onClick}>
       {children}
     </button>
+  );
+};
+
+export const ButtonLink: React.FC<Omit<ButtonProps, "onClick"> & { to: string }> = ({
+  children,
+  to,
+  outline = false,
+  className = "",
+}) => {
+  const nav = useNavigate();
+  const onClick = useCallback(() => {
+    nav(to);
+  }, [nav, to]);
+  return (
+    <Button onClick={onClick} className={className} outline={outline}>
+      {children}
+    </Button>
   );
 };
 
