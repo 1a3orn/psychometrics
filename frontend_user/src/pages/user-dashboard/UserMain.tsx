@@ -1,6 +1,8 @@
-import { PageMain, Navbar, PageContent, List, BasicCard } from "../../components";
-import { ALL_MEASURES } from "../measures/measures";
+import { PageMain, Navbar, PageContent } from "../../components";
 import { UserMainDataProvider } from "./UserMainDataProvider";
+import { TaskCard } from "./components";
+import { useContext } from "react";
+import { UserMainDataContext } from "./UserMainDataProvider";
 
 export const UserDashbooardPage = () => {
   return (
@@ -15,10 +17,24 @@ export const UserDashbooardPage = () => {
   );
 };
 
-export const UserDashContent = () => {
+const Card: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <BasicCard title="Possible Measures">
-      <List elements={ALL_MEASURES} />
-    </BasicCard>
+    <div className="bg-white border border-gray-200 shadow-sm">
+      <div className="p-4">{children}</div>
+    </div>
+  );
+};
+
+export const UserDashContent = () => {
+  const { tasks } = useContext(UserMainDataContext);
+
+  return (
+    <Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {tasks.map((t) => (
+          <TaskCard measure={t} />
+        ))}
+      </div>
+    </Card>
   );
 };

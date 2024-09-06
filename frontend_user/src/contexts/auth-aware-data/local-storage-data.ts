@@ -44,7 +44,6 @@ export const localStorageImpl: AllFncs = {
 
   getRunsAll: async (key: string) => {
     const allRuns = getStorageData();
-    console.log("allRuns", allRuns);
     return allRuns[key] || [];
   },
 

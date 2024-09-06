@@ -14,16 +14,11 @@ export const useTokenManagement = () => {
     try {
       // Defensive coding here
       if (!token) return NOT_LOGGED_IN;
-
       if (typeof token !== "string") return NOT_LOGGED_IN;
 
       // Decode the token
       const decoded = jwtDecode<DecodedToken>(token);
-
-      // if the token is expired, return NOT_LOGGED_IN
       if (decoded.exp < Date.now() / 1000) return NOT_LOGGED_IN;
-
-      // Check that token has username
       if (!decoded.username) return NOT_LOGGED_IN;
 
       return { type: "LOGGED_IN", username: decoded.username, token };

@@ -6,11 +6,15 @@ export type MeasureComponent = React.ComponentType<{
   handleSubmit: (values: Record<string, number>) => void;
 }>;
 
+export type Category = "test" | "processing_speed" | "working_memory";
+
 export type MeasureDefinition = TaskDecorated & {
   // Auto-generated from key : /measures/:key
   to: string;
 
   measureKeys: string[];
+
+  categories: Category[];
 
   // Description
   description: string;

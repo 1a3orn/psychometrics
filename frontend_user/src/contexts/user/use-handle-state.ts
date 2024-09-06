@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 
 import { postLogin, postSignup, postLogout } from "../../api";
-import { ResultSuccess } from "../../shared-automatic";
+import { Result } from "../../shared-automatic";
 
 import { LoginState, UserContextType } from "./types";
 import { useTokenManagement } from "./use-token-management";
@@ -9,14 +9,13 @@ import { useTokenManagementGuest } from "./use-token-management-guest";
 
 const NOT_LOGGED_IN: LoginState = { type: "NOT_LOGGED_IN" };
 
-/* State Transition Diagram
+/* Intended State Transition Diagram
  *
  * LOADING -> [NOT_LOGGED_IN, LOGGED_IN]
  * NOT_LOGGED_IN -> [GUEST, LOGGED_IN]
  * LOGGED_IN -> [NOT_LOGGED_IN]
  * GUEST -> [NOT_LOGGED_IN]
  */
-
 export const useHandleState = (): UserContextType => {
   const { validateToken, getTokenAuth, setTokenAuth, removeTokenAuth } = useTokenManagement();
 
@@ -39,33 +38,39 @@ export const useHandleState = (): UserContextType => {
         }
       }
     }
-  }, [state, validateToken, getTokenAuth]);
+  }, [
+    state,
+    validateToken,
+    getTokenAuth,
+    getTokenGuest,
+    setState,
+    removeTokenGuest,
+    removeTokenAuth,
+    setTokenGuest,
+    setTokenAuth,
+  ]);
 
   const handleSetLoggedIn = useCallback(
-    (result: ResultSuccess<{ token: string }>, username: string) => {
-      setTokenAuth(result.value.token);
-      removeTokenGuest();
-      setState({ type: "LOGGED_IN", username, token: result.value.token });
+    (result: Result<{ token: string }>, username: string) => {
+      if (result.success) {
+        setTokenAuth(result.value.token);
+        removeTokenGuest();
+        setState({ type: "LOGGED_IN", username, token: result.value.token });
+      }
       return result;
     },
-    [setTokenAuth, setState]
+    [setTokenAuth, setState, removeTokenGuest]
   );
 
   const signup = useCallback(
-    async (username: string, password: string, email: string, type: string = "LOCAL") => {
-      const data = await postSignup(username, password, email, type);
-      if (data.success) handleSetLoggedIn(data, username);
-      return data;
-    },
+    async (username: string, password: string, email: string, type: string = "LOCAL") =>
+      handleSetLoggedIn(await postSignup(username, password, email, type), username),
     [handleSetLoggedIn]
   );
 
   const login = useCallback(
-    async (username: string, password: string, type: string = "LOCAL") => {
-      const data = await postLogin(username, password, type);
-      if (data.success) return handleSetLoggedIn(data, username);
-      return data;
-    },
+    async (username: string, password: string, type: string = "LOCAL") =>
+      handleSetLoggedIn(await postLogin(username, password, type), username),
     [handleSetLoggedIn]
   );
 
@@ -74,7 +79,7 @@ export const useHandleState = (): UserContextType => {
     setTokenGuest();
     setState({ type: "GUEST" });
     return { success: true as const, value: undefined };
-  }, [removeTokenAuth, setState, removeTokenGuest]);
+  }, [removeTokenAuth, setState, setTokenGuest]);
 
   const logout = useCallback(async () => {
     removeTokenAuth();

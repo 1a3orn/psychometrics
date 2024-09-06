@@ -6,35 +6,45 @@ import { Unfinished } from "./component-unfinished";
 import { DualNBack } from "./component-dual-n-back";
 import { ReverseDigitSpan } from "./component-reverse-digit-span";
 import { TASKS } from "../../shared-automatic";
-
+import { Category } from "./types";
 export const ALL_MEASURES: MeasureDefinition[] = [
   {
     matchKey: "test",
     description: "This is a test measure, it is used to test the measure component.",
+    shortDescription: "A test measure",
+    categories: ["test"] as Category[],
     numberPerDefault: 3,
     Component: Test,
   },
   {
     matchKey: "reaction_time",
     description: "This is a reaction time measure, it is used to measure the reaction time of the user.",
+    shortDescription: "How fast you respond to a stimulus",
+    categories: ["processing_speed"] as Category[],
     numberPerDefault: 5,
     Component: ReactionTime,
   },
   {
     matchKey: "choosing_reaction_time",
     description: "This is a choosing reaction time measure, it is used to measure the reaction time of the user.",
+    shortDescription: "How fast you discern one of two stimuli",
+    categories: ["processing_speed"] as Category[],
     numberPerDefault: 5,
     Component: Unfinished,
   },
   {
     matchKey: "reverse_digit_span_audio",
     description: "asdasd",
+    shortDescription: "How well you can repeat a sequence of digits backwards",
+    categories: ["working_memory"] as Category[],
     numberPerDefault: 2,
     Component: ReverseDigitSpan,
   },
   {
     matchKey: "dual_n_back",
     description: "This is a dual N-Back measure, it is used to measure the dual N-Back of the user.",
+    shortDescription: "How well you can track multiple stimuli",
+    categories: ["working_memory"] as Category[],
     numberPerDefault: 1,
     Component: DualNBack,
   },
