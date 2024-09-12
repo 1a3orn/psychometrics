@@ -3,6 +3,8 @@ import { MeasureDefinition } from "./types";
 import { Test } from "./component-test";
 import { ReactionTime } from "./component-reaction-time";
 import { Unfinished } from "./component-unfinished";
+import { CorsiBlockTapping } from "./component-corsi-block-tapping";
+import { ReactionTime4Choice } from "./component-reaction-time-4-choice";
 import { DualNBack } from "./component-dual-n-back";
 import { ReverseDigitSpan } from "./component-reverse-digit-span";
 import { TASKS } from "../../shared-automatic";
@@ -25,12 +27,12 @@ export const ALL_MEASURES: MeasureDefinition[] = [
     Component: ReactionTime,
   },
   {
-    matchKey: "choosing_reaction_time",
+    matchKey: "reaction_time_4_choice",
     description: "This is a choosing reaction time measure, it is used to measure the reaction time of the user.",
-    shortDescription: "How fast you discern one of two stimuli",
+    shortDescription: "How fast you discern one of four stimuli",
     categories: ["processing_speed"] as Category[],
-    numberPerDefault: 5,
-    Component: Unfinished,
+    numberPerDefault: 8,
+    Component: ReactionTime4Choice,
   },
   {
     matchKey: "reverse_digit_span_audio",
@@ -39,6 +41,14 @@ export const ALL_MEASURES: MeasureDefinition[] = [
     categories: ["working_memory"] as Category[],
     numberPerDefault: 2,
     Component: ReverseDigitSpan,
+  },
+  {
+    matchKey: "corsi_block_tapping",
+    description: "This is a Corsi Block Tapping measure.",
+    shortDescription: "How well you can remember a sequence of blocks",
+    categories: ["working_memory"] as Category[],
+    numberPerDefault: 1,
+    Component: CorsiBlockTapping,
   },
   {
     matchKey: "dual_n_back",

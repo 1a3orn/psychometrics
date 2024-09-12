@@ -6,6 +6,7 @@ import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@headlessui/r
 import { ButtonDark } from "../Button";
 
 interface NavbarProps {
+  height: number;
   title: string;
   username: string;
   isGuest: boolean;
@@ -49,6 +50,7 @@ const DropdownMenuItem: React.FC<{ onClick: () => void; icon: React.ReactNode; l
 );
 
 export const VisualElement: React.FC<NavbarProps> = ({
+  height,
   title,
   username,
   isGuest,
@@ -61,7 +63,11 @@ export const VisualElement: React.FC<NavbarProps> = ({
   const navigate = useNavigate();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   return (
-    <header id="page-header" className="z-1 flex flex-none items-center bg-teal-500 shadow-sm">
+    <header
+      id="page-header"
+      className="z-1 flex flex-none items-center bg-teal-500 shadow-sm"
+      style={{ height: height + "px" }}
+    >
       <div className="container mx-auto px-4 lg:px-8 xl:max-w-7xl">
         <div className="flex justify-between py-4">
           {/* Left Section */}

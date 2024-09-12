@@ -18,7 +18,7 @@ export type UseMainReturn = Omit<UseMeasuresStateReturn, "state"> & {
 };
 
 export const useMain = (measure: MeasureDefinition): UseMainReturn => {
-  const { runs, reload } = useContext(MeasuresMasterDataContext);
+  const { runs, refresh } = useContext(MeasuresMasterDataContext);
   const { fncs } = useAuthAwareDataProvider();
   const { state, handleHome, handleStartOne, handleStartMany, handleAdvanceMany } = useMainState(measure);
 
@@ -40,9 +40,9 @@ export const useMain = (measure: MeasureDefinition): UseMainReturn => {
         measures: validated,
       });
 
-      await reload();
+      await refresh();
     },
-    [state, measure, reload, fncs]
+    [state, measure, refresh, fncs]
   );
 
   const handleNextMany = useCallback(

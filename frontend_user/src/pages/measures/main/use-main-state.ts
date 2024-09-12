@@ -37,8 +37,14 @@ export const useMainState = (measure: MeasureDefinition): UseMeasuresStateReturn
   const handleStartOne = uc(() => ss({ type: "one", startedAt: getNow() }), []);
   const handleStartMany = uc(() => ss({ type: "many", iteration: 0, startedAt: getNow() }), []);
 
+  console.log(state);
+
   const handleAdvanceMany = uc(() => {
     if (state.type !== "many") return;
+
+    console.log(state.iteration);
+    console.log(measure.numberPerDefault);
+    console.log(state.iteration < measure.numberPerDefault - 1);
 
     if (state.iteration < measure.numberPerDefault - 1) {
       const nextIteration = state.iteration + 1;

@@ -10,16 +10,21 @@ export const TASKS: TaskDecorated[] = [
   },
   {
     key: "reaction_time",
-    title: "Reaction Time",
+    title: "Reaction Time (Simple)",
     measures: [{ key: "reaction_time", title: "Reaction Time" }],
   },
   {
-    key: "choosing_reaction_time",
-    title: "Choosing Reaction Time",
+    key: "reaction_time_4_choice",
+    title: "Reaction Time (4 Choice)",
     measures: [
       { key: "reaction_time", title: "Reaction Time" },
       { key: "accuracy", title: "Accuracy" },
     ],
+  },
+  {
+    key: "corsi_block_tapping",
+    title: "Corsi Block Tapping",
+    measures: [{ key: "highest_sequence", title: "Highest Sequence" }],
   },
   {
     key: "reverse_digit_span_audio",

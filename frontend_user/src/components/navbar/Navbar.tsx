@@ -6,6 +6,8 @@ import { VisualElement } from "./VisualElement";
 import { useRedirectIfNotLoggedIn } from "../../hooks";
 import { LoginState } from "../../contexts/user/types";
 
+export const NAVBAR_HEIGHT = 60;
+
 type NavbarProps = {
   title: string;
 };
@@ -51,6 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
 
   return (
     <VisualElement
+      height={NAVBAR_HEIGHT}
       username={getUsername(state)}
       isGuest={state.type === "GUEST"}
       title={title}
