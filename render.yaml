@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: frontend
+    env: static
+    buildCommand: cd frontend_user && pnpm install && pnpm run build
+    staticPublishPath: ./frontend_user/build
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+  - type: web
+    name: backend
+    env: node
+    buildCommand: cd backend && pnpm install && pnpm run build
+    startCommand: cd backend && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_PORT
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: USER_PORT
+        value: 8080
+      - key: USER_SESSION_SECRET
+        sync: false
+      - key: USER_TOKEN_SECRET
+        sync: false
+      - key: USER_STATIC_DIR
+        sync: false
+
+  - type: pserv
+    name: db
+    env: docker
+    dockerfilePath: ./Dockerfile.postgres
+    diskSize: 1024
