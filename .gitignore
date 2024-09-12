@@ -20,6 +20,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.development.docker
+.env.production.docker
+.env.*
 
 npm-debug.log*
 yarn-debug.log*

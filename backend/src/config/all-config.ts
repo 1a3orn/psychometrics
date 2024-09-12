@@ -2,7 +2,7 @@ import { getStrCfg, getIntCfg } from "./get-env-var";
 
 const getConfig = () => {
   return {
-    nodeEnv: getStrCfg("NODE_ENV", undefined, ["development", "production"]),
+    nodeEnv: getStrCfg("NODE_ENV", undefined, ["development", "production", "migrations"]),
     user: {
       portServer: getIntCfg("USER_PORT"),
       secrets: {

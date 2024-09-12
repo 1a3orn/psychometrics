@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "copy": "pnpm run build && rsync -av --exclude='*.spec.ts' src/ ../frontend_user/src/shared-automatic/ && rsync -av --exclude='*.spec.ts' src/ ../backend/src/shared-automatic/",
+    "copy": "pnpm run build && pnpm run copy:remove-old && pnpm run copy:user && pnpm run copy:backend",
+    "copy:remove-old": "rm -rf ../frontend_user/src/shared-automatic/* && rm -rf ../backend/src/shared-automatic/*",
+    "copy:user": "rsync -av --exclude='*.spec.ts' src/ ../frontend_user/src/shared-automatic/",
+    "copy:backend": "rsync -av --exclude='*.spec.ts' src/ ../backend/src/shared-automatic/",
     "start": "node dist/index.js",
     "dev": "tsc -w",
     "test": "jest"

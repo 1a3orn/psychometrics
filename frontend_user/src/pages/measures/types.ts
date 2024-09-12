@@ -1,4 +1,4 @@
-import { TaskDecorated } from "../../shared-automatic/types";
+import { TaskDecorated } from "../../shared-automatic";
 
 export type MeasureComponent = React.ComponentType<{
   priorRun?: Record<string, number>;

@@ -35,3 +35,11 @@ TLDR: Lol no, waste of time.
 # Link: https://gwern.net/doc/dual-n-back/2022-watrin.pdf
 
 AlphaSpan, N-Back, doesn't increase intelligence. Makse nice point that you should need to expect > 30 hours to see any effect.
+
+# Title: "Hundred Days of Cognitive Training Enhance Broad Cognitive Abilities in Adulthood: Findings from the COGITO Study"
+
+# Link: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2914582/
+
+TLDR: Claims positive transfer.
+
+"In each practice session, participants practiced 12 different tasks. For PS, these were three two-choice reaction tasks (odd vs. even numbers; consonants vs. vowels; symmetric vs. asymmetric figures) and three comparison tasks (two strings of digits; two strings of consonants; two three-dimensional figures). For EM, participants had to memorize word lists, number-word pairs, or object positions in a grid. WM tasks were adapted versions of the alpha span (Craik, 1986), numerical memory updating (Salthouse et al., 1991), and spatial n-back (Cohen et al., 1997) tasks."

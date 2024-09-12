@@ -16,8 +16,8 @@ export const getDataSource = () => {
     synchronize: false,
     logging: true,
     entities: [User, Admin, UserLoginStrategy, AdminLoginStrategy, Run, Measure],
-    migrations: ["src/db/migrations/**/*.ts"],
-    subscribers: ["src/db/subscribers/**/*.ts"],
+    migrations: ["development", "migrations"].includes(config.nodeEnv) ? ["src/db/migrations/**/*.ts"] : [],
+    subscribers: ["development", "migrations"].includes(config.nodeEnv) ? ["src/db/subscribers/**/*.ts"] : [],
   });
 };
 
