@@ -1,7 +1,7 @@
-import Koa from 'koa';
-import { ZodError } from 'zod';
+import Koa from "koa";
+import { ZodError } from "zod";
 
-import { getStrCfg } from '../config';
+import { config } from "../config";
 
 export const middlewareError: Koa.Middleware = async (ctx, next) => {
   try {
@@ -11,21 +11,21 @@ export const middlewareError: Koa.Middleware = async (ctx, next) => {
       ctx.status = 400;
       ctx.body = {
         error: {
-          message: 'Validation failed',
-          details: err.errors.map(e => ({
-            path: e.path.join('.'),
-            message: e.message
-          }))
-        }
+          message: "Validation failed",
+          details: err.errors.map((e) => ({
+            path: e.path.join("."),
+            message: e.message,
+          })),
+        },
       };
     } else {
-      console.error('Error caught:', err);
+      console.error("Error caught:", err);
       ctx.status = err.status || 500;
-    ctx.body = {
-      error: {
-        message: err.message,
-        stack: getStrCfg('NODE_ENV') === 'development' ? err.stack : undefined
-      }
+      ctx.body = {
+        error: {
+          message: err.message,
+          stack: config.nodeEnv === "development" ? err.stack : undefined,
+        },
       };
     }
   }

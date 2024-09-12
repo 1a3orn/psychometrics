@@ -1,4 +1,4 @@
-import { getStrCfg } from "./config";
+import { config } from "./config";
 import { serveStatic } from "./shared-middleware";
 import { getUserCommonRoutes } from "./routes-user-common";
 import { getUserSpecificRoutes } from "./routes-user-specific";
@@ -10,7 +10,7 @@ export const appUser = async () => {
   // 1. Get generic app that can be used for
   //    user + CMS server
   const app = await getApp({
-    sessionSecret: getStrCfg("USER_SESSION_SECRET"),
+    sessionSecret: config.user.secrets.session,
   });
 
   //
@@ -28,7 +28,7 @@ export const appUser = async () => {
   // To dump????
   app.use(
     serveStatic({
-      folder: getStrCfg("USER_STATIC_DIR"),
+      folder: config.user.staticDir,
       route: "/",
     })
   );

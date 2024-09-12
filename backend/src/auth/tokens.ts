@@ -1,7 +1,7 @@
 import { Context, Middleware } from "koa";
 import jwt from "jsonwebtoken";
 
-import { getStrCfg } from "../config";
+import { config } from "../config";
 
 export type TokenPayload = {
   userId: string;
@@ -11,11 +11,11 @@ export type TokenPayload = {
 export const signToken = (data: TokenPayload) => {
   const payload = { userId: data.userId, username: data.username };
 
-  return jwt.sign(payload, getStrCfg("USER_TOKEN_SECRET"), { expiresIn: "30s" });
+  return jwt.sign(payload, config.user.secrets.token, { expiresIn: "30s" });
 };
 
 export const verifyToken = (token: string) => {
-  const result = jwt.verify(token, getStrCfg("USER_TOKEN_SECRET"));
+  const result = jwt.verify(token, config.user.secrets.token);
 
   console.log("result", result);
 
