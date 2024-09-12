@@ -29,3 +29,8 @@ yarn-debug.log*
 yarn-error.log*
 
 readme.md
+README.md
+./readme.md
+./README.md
+*.md
+

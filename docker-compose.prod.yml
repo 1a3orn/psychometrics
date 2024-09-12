@@ -1,0 +1,70 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-prod.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend_user/Dockerfile
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    expose:
+      - "8080"
+    environment:
+      - NODE_ENV=production
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - USER_PORT=8080
+      - USER_SESSION_SECRET=${USER_SESSION_SECRET}
+      - USER_TOKEN_SECRET=${USER_TOKEN_SECRET}
+      - USER_STATIC_DIR=${USER_STATIC_DIR}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  migration:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: node run-migrations.js
+    environment:
+      - NODE_ENV=migrations
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - USER_PORT=8080
+      - USER_SESSION_SECRET=${USER_SESSION_SECRET}
+      - USER_TOKEN_SECRET=${USER_TOKEN_SECRET}
+      - USER_STATIC_DIR=${USER_STATIC_DIR}
+    depends_on:
+      - db
+volumes:
+  postgres_data:
