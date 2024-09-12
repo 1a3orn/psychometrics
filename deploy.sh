@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pull latest changes
-git pull origin main
+git pull origin master
 
 # Build and start containers
 # while adding the .env.prod file env variables
