@@ -26,7 +26,7 @@ export const useCorsiBlockTapping = ({ handleSubmit }: { handleSubmit: (data: Re
 
   const results = useMemo(() => {
     return [{ name: "Highest Success Index", value: highestSuccessIndex }];
-  }, [highestSuccessIndex, trials.length]);
+  }, [highestSuccessIndex]);
 
   const handleSubmitInner = useCallback(() => {
     setPhase("running");

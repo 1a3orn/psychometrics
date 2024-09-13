@@ -2,7 +2,6 @@ import { MeasureDefinition } from "./types";
 
 import { Test } from "./component-test";
 import { ReactionTime } from "./component-reaction-time";
-import { Unfinished } from "./component-unfinished";
 import { CorsiBlockTapping } from "./component-corsi-block-tapping";
 import { ReactionTime4Choice } from "./component-reaction-time-4-choice";
 import { DualNBack } from "./component-dual-n-back";

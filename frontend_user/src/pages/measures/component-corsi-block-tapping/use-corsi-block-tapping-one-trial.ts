@@ -42,7 +42,7 @@ export const useCorsiBlockTappingOneTrial = ({
         setHighlightedSqIdx(null);
       }, MS_VISIBLE);
     },
-    [highlightedSqIdx, trial.sequenceIndices, onSuccess, onFailure]
+    [phase]
   );
 
   const handleFinishClick = useCallback(() => {

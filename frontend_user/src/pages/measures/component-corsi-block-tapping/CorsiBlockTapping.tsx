@@ -7,7 +7,6 @@ export const CorsiBlockTapping: MeasureComponent = ({ priorRun, handleCancel, ha
   const {
     trials,
     currentTrialIndex,
-    setCurrentTrialIndex,
     viewHeight,
     phase,
     results,
