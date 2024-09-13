@@ -33,7 +33,7 @@ const useGetAllRecentRuns = () => {
   });
 };
 
-export const UserMainDataProvider = ({ children }: { children: React.ReactNode }) => {
+export const UserDashDataProvider = ({ children }: { children: React.ReactNode }) => {
   const asyncState = useGetAllRecentRuns();
 
   if (asyncState.type === "loading") {

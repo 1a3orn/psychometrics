@@ -8,6 +8,7 @@ import { DualNBack } from "./component-dual-n-back";
 import { ReverseDigitSpan } from "./component-reverse-digit-span";
 import { TASKS } from "../../shared-automatic";
 import { Category } from "./types";
+
 export const ALL_MEASURES: MeasureDefinition[] = [
   {
     matchKey: "test",

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LastRun } from "./LastRun";
 
-import { MeasureWithLatestRun } from "../UserMainDataProvider";
+import { MeasureWithLatestRun } from "../UserDashDataProvider";
 import { CardClickable, PillCategory } from "../../../components";
 
 interface TaskCardProps {

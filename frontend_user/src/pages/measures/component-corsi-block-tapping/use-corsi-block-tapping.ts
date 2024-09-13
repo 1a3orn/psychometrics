@@ -5,6 +5,7 @@ import { generateTrials } from "./generate-trials";
 import { ACCEPTANCE_BAR_HEIGHT } from "./constants";
 
 export const useCorsiBlockTapping = ({ handleSubmit }: { handleSubmit: (data: Record<string, number>) => void }) => {
+  // Immutable
   const trials = useMemo(() => generateTrials({ maxTrials: 30 }), []);
 
   const [currentTrialIndex, setCurrentTrialIndex] = useState(3);

@@ -1,5 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
+
+import { MeasureEndingScreen } from "../../../components";
+
 import { Trial } from "./generate-trials";
+import { getNFromPriorRun } from "./get-n-from-prior-run";
 
 export const DualNBackResults: React.FC<{
   nBack: number;
@@ -27,29 +31,21 @@ export const DualNBackResults: React.FC<{
     };
   }, [nBack, trials, userPositionResponses, userLetterResponses]);
 
+  const handleSubmitInner = useCallback(() => {
+    handleSubmit(results);
+  }, [handleSubmit, results]);
+
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Game Results</h2>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h3 className="text-xl font-semibold">Position</h3>
-          <p>N-Back: {results.n_back}</p>
-          <p>Correct: {results.accuracy_total}</p>
-          <p>Correct Position: {results.accuracy_position}</p>
-          <p>Correct Letter: {results.accuracy_letter}</p>
-        </div>
-      </div>
-      <div className="mt-4">
-        <button
-          onClick={() => handleSubmit(results)}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-        >
-          Submit Results
-        </button>
-        <button onClick={handleCancel} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          Cancel
-        </button>
-      </div>
-    </div>
+    <MeasureEndingScreen
+      results={[
+        { name: "N Back", value: nBack },
+        { name: "Next N Back", value: getNFromPriorRun(results) },
+        { name: "Accuracy Letter", value: results.accuracy_letter },
+        { name: "Accuracy Position", value: results.accuracy_position },
+        { name: "Accuracy Total", value: results.accuracy_total },
+      ]}
+      handleCancel={handleCancel}
+      handleSubmit={handleSubmitInner}
+    />
   );
 };

@@ -5,7 +5,9 @@ type KeyPressHandler = (event: KeyboardEvent) => void;
 export const useKeyPress = (keys: string[], callback: KeyPressHandler) => {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
-      if (keys.includes(event.key)) {
+      const lowerCaseKey = event.key.toLowerCase();
+      const lowerCaseKeys = keys.map((key) => key.toLowerCase());
+      if (lowerCaseKeys.includes(lowerCaseKey)) {
         callback(event);
       }
     },

@@ -1,63 +1,56 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { useTimeout, useKeyPress } from "../../../hooks";
 
 export type Choice = "A" | "S" | "K" | "L";
 const CHOICES: Choice[] = ["A", "S", "K", "L"];
 
-export const useReactionTime4Choice = () => {
-  const [stage, setStage] = useState<"waiting" | "click" | "result">("waiting");
+type TestState =
+  | { stage: "waiting" }
+  | { stage: "click"; startTime: number }
+  | { stage: "result"; reactionTime: number; correct: boolean };
 
-  const choice = useMemo<Choice>(() => CHOICES[Math.floor(Math.random() * CHOICES.length)], []);
+const getRandomChoice = (): Choice => {
+  return CHOICES[Math.floor(Math.random() * CHOICES.length)];
+};
 
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [reactionTime, setReactionTime] = useState<number | null>(null);
-  const [correct, setCorrect] = useState<boolean | null>(null);
+export const useReactionTime4Choice = ({ handleSubmit }: { handleSubmit: (data: Record<string, number>) => void }) => {
+  // Immutable during hook lifecycle
+  const choice = useMemo<Choice>(() => getRandomChoice(), []);
+  const delay = useMemo(() => Math.floor(Math.random() * 9000) + 1000, []);
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Mutable during hook lifecycle
+  const [state, setState] = useState<TestState>({ stage: "waiting" });
 
-  const startTest = useCallback(() => {
-    const delay = Math.floor(Math.random() * 9000) + 1000; // 1-10 seconds
-    timeoutRef.current = setTimeout(() => {
-      if (stage === "waiting") {
-        setStage("click");
-        setStartTime(Date.now());
-      }
-    }, delay);
-  }, [stage]);
-
-  useEffect(() => {
-    if (stage === "waiting") {
-      startTest();
+  // Handlers
+  const handleSubmitInner = useCallback(() => {
+    if (state.stage === "result") {
+      handleSubmit({
+        accuracy: state.correct ? 1 : 0,
+        reaction_time: state.reactionTime,
+      });
     }
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [stage, startTest]);
+  }, [handleSubmit, state]);
 
-  const handleKeyPress = useCallback(
-    (event: KeyboardEvent) => {
-      if (stage === "click" && startTime) {
-        const endTime = Date.now();
-        const time = endTime - startTime;
-        setReactionTime(time);
-        if (event.key.toLowerCase() === choice.toLowerCase()) {
-          setCorrect(true);
-        } else {
-          setCorrect(false);
-        }
-        setStage("result");
-      }
-    },
-    [stage, startTime, choice]
-  );
+  const handleStart = useCallback(() => {
+    if (state.stage === "waiting") {
+      setState({ stage: "click", startTime: Date.now() });
+    }
+  }, [state]);
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleKeyPress]);
+  useTimeout({ callback: handleStart, timeout: delay });
 
-  return { stage, choice, correct, reactionTime, startTest };
+  useKeyPress(CHOICES, (event: KeyboardEvent) => {
+    if (state.stage === "click") {
+      const endTime = Date.now();
+      const reactionTime = endTime - state.startTime;
+      const correct = event.key.toLowerCase() === choice.toLowerCase();
+      setState({ stage: "result", reactionTime, correct });
+    }
+  });
+
+  return {
+    state,
+    choice,
+    handleSubmitInner,
+  };
 };

@@ -11,4 +11,4 @@ export * from "./ErrorMessage";
 export * from "./CardClickable";
 export * from "./PillCategory";
 export * from "./Pill";
-export * from "./EndingScreen";
+export * from "./MeasureEndingScreen";

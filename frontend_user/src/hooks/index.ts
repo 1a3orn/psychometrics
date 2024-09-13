@@ -6,3 +6,4 @@ export * from "./use-sequence";
 export * from "./use-key-press-handler";
 export * from "./use-handle-bool-array";
 export * from "./use-effect-once";
+export * from "./use-timeout";

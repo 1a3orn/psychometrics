@@ -1,7 +1,7 @@
 import { MeasureComponent } from "../types";
 import { useCorsiBlockTapping } from "./use-corsi-block-tapping";
 import { CorsiBlockTappingOneTrial } from "./CorsiBlockTappingOneTrial";
-import { EndingScreen } from "../../../components";
+import { MeasureEndingScreen } from "../../../components";
 
 export const CorsiBlockTapping: MeasureComponent = ({ priorRun, handleCancel, handleSubmit }) => {
   const {
@@ -27,7 +27,7 @@ export const CorsiBlockTapping: MeasureComponent = ({ priorRun, handleCancel, ha
           onFailure={handleCompletedTrialUnsuccessfully}
         />
       ) : (
-        <EndingScreen results={results} handleCancel={handleCancel} handleSubmit={handleSubmitInner} />
+        <MeasureEndingScreen results={results} handleCancel={handleCancel} handleSubmit={handleSubmitInner} />
       )}
     </div>
   );

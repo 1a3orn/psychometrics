@@ -6,11 +6,12 @@ interface CardProps {
 }
 
 export const CardClickable: React.FC<CardProps> = ({ onClick, children }) => {
+  console.log("CardClickable");
   return (
     <div
-      className="bg-white border-2 border-teal-500 overflow-hidden cursor-pointer
+      className="bg-white border-2 border-gray-100 overflow-hidden cursor-pointer
                  transition-all duration-300 ease-in-out
-                 hover:bg-teal-50 hover:shadow-md
+                 hover:bg-gray-100 hover:shadow-sm
                  shadow-sm"
       onClick={onClick}
     >
