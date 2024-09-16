@@ -1,6 +1,6 @@
 import { Run, Measure } from "../db/entities/entities";
 
-type RunView = {
+export type RunView = {
   id: string;
   key: string;
   startedAt: string;

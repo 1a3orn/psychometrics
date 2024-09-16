@@ -1,29 +1,42 @@
 import { Context } from "koa";
-import { Run } from "../db/entities/entities";
-import { TASKS, schemaRuns } from "../shared-automatic";
 import { getUserId } from "../auth";
-import { dbRunToRun } from "./run-to-record";
+import { fetchRunsForKey } from "./data-all-key";
+import { Parser } from "@json2csv/plainjs";
+import { z } from "zod";
 
-const isNotNull = <T>(value: T | null): value is T => value !== null;
+const shared = async (ctx: Context) => {
+  const userId = await getUserId(ctx);
+  const key = z.string().parse(ctx.params.key);
+
+  const allRuns = await fetchRunsForKey(userId, key);
+  if (!allRuns.success) return ctx.throw(500, allRuns.error);
+
+  return {
+    allRuns: allRuns.value,
+    key,
+  };
+};
 
 export const routeAllKey = async (ctx: Context) => {
-  const userId = await getUserId(ctx);
-  const key = ctx.params.key;
+  const { allRuns } = await shared(ctx);
+  ctx.body = allRuns;
+};
 
-  if (!key) ctx.throw(400, "Key is required");
+export const routeAllKeyCSV = async (ctx: Context) => {
+  const { allRuns, key } = await shared(ctx);
 
-  const taskProto = TASKS.find((task) => task.key === key);
-  if (!taskProto) return ctx.throw(404, "Task not found");
+  const csv = new Parser().parse(
+    allRuns.map((run) => ({
+      startedAt: run.startedAt,
+      endedAt: run.endedAt,
+      ...Object.keys(run.measures).reduce((acc, measureKey) => {
+        acc[measureKey] = run.measures[measureKey];
+        return acc;
+      }, {} as Record<string, number>),
+    }))
+  );
 
-  // Get all runs for some task type
-  const allRuns = await Run.createQueryBuilder("run")
-    .where("run.user.id = :userId", { userId })
-    .innerJoinAndSelect("run.measures", "measures")
-    .andWhere("run.key = :key", { key })
-    .orderBy("run.created_at", "ASC")
-    .getMany();
-
-  const formattedRuns = allRuns.map(dbRunToRun).filter(isNotNull);
-
-  ctx.body = schemaRuns.parse(formattedRuns);
+  ctx.set("Content-Type", "text/csv");
+  ctx.set("Content-Disposition", `attachment; filename=${key}_runs.csv`);
+  ctx.body = csv;
 };

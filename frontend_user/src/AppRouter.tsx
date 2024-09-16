@@ -6,6 +6,8 @@ import {
   UserAnalyticsPage,
   UserAccountPage,
   UserSettingsPage,
+  LoginResetPasswordPage,
+  LoginResetPasswordLinkPage,
 } from "./pages";
 
 import { MeasuresRouter } from "./pages/measures";
@@ -21,6 +23,8 @@ export const AppRouter = () => {
         <Route path="/analytics" element={<UserAnalyticsPage />} />
         <Route path="/account" element={<UserAccountPage />} />
         <Route path="/settings" element={<UserSettingsPage />} />
+        <Route path="/reset-password" element={<LoginResetPasswordPage />} />
+        <Route path="/reset-password-link" element={<LoginResetPasswordLinkPage />} />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

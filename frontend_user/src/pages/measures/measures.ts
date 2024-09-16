@@ -6,6 +6,7 @@ import { CorsiBlockTapping } from "./component-corsi-block-tapping";
 import { ReactionTime4Choice } from "./component-reaction-time-4-choice";
 import { DualNBack } from "./component-dual-n-back";
 import { ReverseDigitSpan } from "./component-reverse-digit-span";
+import { OddManOut } from "./component-odd-man-out";
 import { TASKS } from "../../shared-automatic";
 import { Category } from "./types";
 
@@ -17,6 +18,14 @@ export const ALL_MEASURES: MeasureDefinition[] = [
     categories: ["test"] as Category[],
     numberPerDefault: 3,
     Component: Test,
+  },
+  {
+    matchKey: "reaction_time_odd_man_out",
+    description: "This is a odd man out measure, it is used to measure the odd man out of the user.",
+    shortDescription: "How well you can discern one of four stimuli",
+    categories: ["processing_speed"] as Category[],
+    numberPerDefault: 1,
+    Component: OddManOut,
   },
   {
     matchKey: "reaction_time",

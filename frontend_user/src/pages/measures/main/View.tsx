@@ -3,7 +3,7 @@ import { UseMainReturn } from "./use-main";
 import { MeasureDefinition } from "../types";
 import { PageContent, CardBase, Button } from "../../../components";
 import { MeasureChartProcessed } from "./components";
-
+import { DownloadCSVLink } from "./ViewDownload";
 export const View = (props: UseMainReturn & { measure: MeasureDefinition }) => {
   const navigate = useNavigate();
 
@@ -36,6 +36,7 @@ export const View = (props: UseMainReturn & { measure: MeasureDefinition }) => {
         }
       >
         <div className="h-80 w-full">
+          <DownloadCSVLink measureKey={props.measure.key} />
           <MeasureChartProcessed data={mappedData} xAxisDataKey="startedAt" yAxisDataKeys={props.measure.measureKeys} />
         </div>
         <div className="flex flex-col gap-4">

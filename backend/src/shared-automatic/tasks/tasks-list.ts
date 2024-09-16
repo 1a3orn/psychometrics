@@ -22,6 +22,14 @@ export const TASKS: TaskDecorated[] = [
     ],
   },
   {
+    key: "reaction_time_odd_man_out",
+    title: "Odd Man Out",
+    measures: [
+      { key: "accuracy", title: "Accuracy" },
+      { key: "reaction_time", title: "Reaction Time" },
+    ],
+  },
+  {
     key: "corsi_block_tapping",
     title: "Corsi Block Tapping",
     measures: [{ key: "highest_sequence", title: "Highest Sequence" }],

@@ -1,2 +1,3 @@
 export * from "./get-env-var";
-export * from "./all-config";
+export * from "./config-db";
+export * from "./config-all";

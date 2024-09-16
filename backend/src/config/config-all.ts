@@ -1,8 +1,10 @@
 import { getStrCfg, getIntCfg } from "./get-env-var";
+import { getConfigDb } from "./config-db";
 
 const getConfig = () => {
+  const configDb = getConfigDb();
   return {
-    nodeEnv: getStrCfg("NODE_ENV", undefined, ["development", "production", "migrations"]),
+    nodeEnv: configDb.nodeEnv,
     user: {
       portServer: getIntCfg("USER_PORT"),
       secrets: {
@@ -11,13 +13,7 @@ const getConfig = () => {
       },
       staticDir: getStrCfg("USER_STATIC_DIR"),
     },
-    db: {
-      port: getIntCfg("DB_PORT"),
-      host: getStrCfg("DB_HOST"),
-      username: getStrCfg("DB_USERNAME"),
-      password: getStrCfg("DB_PASSWORD"),
-      name: getStrCfg("DB_NAME"),
-    },
+    db: configDb,
   };
 };
 

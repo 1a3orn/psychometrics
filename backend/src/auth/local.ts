@@ -9,6 +9,8 @@ import { User, UserLoginStrategy } from "../db";
 import { getAppDataSource } from "../db/add-datasource";
 import { TokenPayload } from "./tokens";
 
+import { hashPassword, comparePassword } from "./local-password";
+
 // Constants
 const SALT_ROUNDS = 10;
 const MIN_PASSWORD_LENGTH = 8;
@@ -43,7 +45,7 @@ const validateCredentials = async (user: User, password: string): Promise<boolea
   const hashedPassword = loginStrategy?.strategyData?.hashedPassword;
   if (!hashedPassword) return false;
 
-  return await bcrypt.compare(password, hashedPassword);
+  return await comparePassword(password, hashedPassword);
 };
 
 // Main functions
@@ -80,7 +82,7 @@ export const signupLocal = async (ctx: Context): Promise<Result<TokenPayload>> =
     newUser.email = email;
     await transaction.save(newUser);
 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const hashedPassword = await hashPassword(password);
     const loginStrategy = new UserLoginStrategy();
     loginStrategy.strategyType = "LOCAL";
     loginStrategy.strategyData = { hashedPassword };

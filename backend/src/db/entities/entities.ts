@@ -134,3 +134,51 @@ export class Measure extends BaseTable {
   @Index()
   run: Run;
 }
+
+@Entity()
+export class UserPasswordReset extends BaseTable {
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "user_id" })
+  @Index()
+  user: User;
+
+  @Column({ name: "reset_code", nullable: false })
+  @Index()
+  resetCode: string;
+
+  @Column({ name: "expires_at", nullable: false })
+  expiresAt: Date;
+
+  @Column({ name: "used_at", nullable: true })
+  usedAt: Date;
+
+  @Column({ name: "ip_address", nullable: false })
+  ipAddress: string;
+
+  @Column({ name: "user_agent", nullable: false })
+  userAgent: string;
+}
+
+@Entity()
+export class AdminPasswordReset extends BaseTable {
+  @ManyToOne(() => Admin)
+  @JoinColumn({ name: "admin_id" })
+  @Index()
+  admin: Admin;
+
+  @Column({ name: "reset_code", nullable: false })
+  @Index()
+  resetCode: string;
+
+  @Column({ name: "expires_at", nullable: false })
+  expiresAt: Date;
+
+  @Column({ name: "used_at", nullable: true })
+  usedAt: Date;
+
+  @Column({ name: "ip_address", nullable: false })
+  ipAddress: string;
+
+  @Column({ name: "user_agent", nullable: false })
+  userAgent: string;
+}

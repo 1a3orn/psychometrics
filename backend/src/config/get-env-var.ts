@@ -5,10 +5,13 @@ const getFailMsg = (key: string): string => `Environment variable ${key} is not 
  * the environment variables
  * and throw an error if the key is not found
  */
+
 export const getStrCfg = (key: string, defaultValue?: string, enums?: string[]): string => {
   const value = process.env[key] ?? defaultValue;
+
   if (!value) {
-    throw new Error(getFailMsg(key));
+    //throw new Error(getFailMsg(key));
+    return "";
   }
 
   if (enums && !enums.includes(value)) {

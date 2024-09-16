@@ -8,6 +8,7 @@ interface InputFieldProps {
   label?: string;
   placeholder?: string;
   errorMessage?: string;
+  readonly?: boolean;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -18,6 +19,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   type = "text",
   placeholder = "",
   errorMessage = "",
+  readonly = false,
 }) => {
   const borderColor = errorMessage ? "border-red-500" : "border-teal-500";
   const textColor = errorMessage ? "text-red-700" : "text-gray-700 dark:text-gray-300";
@@ -41,6 +43,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         value={value}
         onChange={onChange}
         className={totalClass}
+        readOnly={readonly}
       />
       <p className="text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
     </div>
