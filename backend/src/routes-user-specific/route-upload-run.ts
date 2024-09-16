@@ -1,43 +1,33 @@
 import { Context } from "koa";
-import { Run, Measure, User } from "../db/entities/entities";
-import { schemaRun, TASKS } from "../shared-automatic";
+import { schemaRun, schemaRuns } from "../shared-automatic";
 import { getUserId } from "../auth";
 import { getAppDataSource } from "../db/add-datasource";
+import { processRun } from "./data-process-run";
 
 export const routeUploadRun = async (ctx: Context) => {
-  const dataSource = getAppDataSource(ctx);
-
   const userId = await getUserId(ctx);
-  const body = schemaRun.parse(ctx.request.body);
+  const body = schemaRun.safeParse(ctx.request.body);
 
-  // 1. Get
-  const taskProto = TASKS.find((task) => task.key === body.key);
-  if (!taskProto) return ctx.throw(404, "Task not found");
+  if (!body.success) return ctx.throw(400, body.error);
 
-  const validated = taskProto.validateObject(body.measures);
-  if (!validated.success) {
-    return ctx.throw(400, validated.error);
-  }
-
-  await dataSource.manager.transaction(async (transaction) => {
-    const run = new Run();
-    run.startedAt = new Date(body.startedAt);
-    run.endedAt = new Date(body.endedAt);
-    run.metadata = body.metadata || {};
-    run.key = taskProto.key;
-    run.user = { id: userId } as User;
-
-    await transaction.save(run);
-
-    const measures = Object.keys(body.measures).map((key) => {
-      const m = new Measure();
-      m.key = key;
-      m.number = body.measures[key];
-      m.run = run;
-      return m;
-    });
-    await transaction.save(measures);
+  const result = await getAppDataSource(ctx).manager.transaction(async (transaction) => {
+    return processRun(body.data, userId, transaction);
   });
 
-  ctx.body = { success: true };
+  ctx.body = { success: result.success };
+};
+
+export const routeUploadMultipleRuns = async (ctx: Context) => {
+  const userId = await getUserId(ctx);
+  const bodies = schemaRuns.safeParse(ctx.request.body);
+
+  if (!bodies.success) return ctx.throw(400, bodies.error);
+
+  const results = await getAppDataSource(ctx).manager.transaction(async (transaction) => {
+    return Promise.all(bodies.data.map((body) => processRun(body, userId, transaction)));
+  });
+
+  ctx.body = {
+    success: results.filter((r) => r.success).length,
+  };
 };
