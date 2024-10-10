@@ -21,6 +21,8 @@ type Measures = Record<string, number>;
 
 export const apiPostRun = async (run: RunUpload) => (await client.post("/user/upload-run", run)).data;
 
+export const apiPostRuns = async (runs: RunUpload[]) => (await client.post("/user/upload-multiple-runs", runs)).data;
+
 export type RunAllKey = Run & {
   measures: Measures;
 };

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { apiGetRunsRecent, apiGetRunsAll, apiPostRun } from "../../api/req-user";
+import { apiGetRunsRecent, apiGetRunsAll, apiPostRun, apiPostRuns } from "../../api/req-user";
 
 import { AuthAwareDataProviderType, SourceType } from "./types";
 import { useUser } from "../user";
@@ -23,6 +23,7 @@ export const useHandleState = (): AuthAwareDataProviderType => {
         getRunsRecent: apiGetRunsRecent,
         getRunsAll: apiGetRunsAll,
         postRun: apiPostRun,
+        postRuns: apiPostRuns,
       };
     } else {
       return localStorageImpl;

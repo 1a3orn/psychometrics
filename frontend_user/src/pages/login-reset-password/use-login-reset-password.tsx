@@ -11,7 +11,7 @@ export const useLoginResetPassword = () => {
   // Pull username + reset code from query params
   const [searchParams, setSearchParams] = useSearchParams();
   const username = useMemo(() => searchParams.get("username"), [searchParams]);
-  const resetCode = useMemo(() => searchParams.get("resetCode"), [searchParams]);
+  const resetCode = useMemo(() => searchParams.get("code"), [searchParams]);
 
   const [stringError, setStringError] = useState<string | null>(null);
   const [stringSuccess, setStringSuccess] = useState<string | null>(null);
@@ -19,10 +19,16 @@ export const useLoginResetPassword = () => {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!username || !resetCode) {
-        setStringError("Missing username or reset code");
+      if (!username) {
+        setStringError("Missing username");
         return;
       }
+
+      if (!resetCode) {
+        setStringError("Missing reset code");
+        return;
+      }
+
       if (!state.password1 || !state.password2) {
         setStringError("Missing password");
         return;

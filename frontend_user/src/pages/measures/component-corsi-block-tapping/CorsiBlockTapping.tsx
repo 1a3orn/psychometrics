@@ -13,7 +13,7 @@ export const CorsiBlockTapping: MeasureComponent = ({ priorRun, handleCancel, ha
     handleCompletedTrialSuccessfully,
     handleCompletedTrialUnsuccessfully,
     handleSubmitInner,
-  } = useCorsiBlockTapping({ handleSubmit });
+  } = useCorsiBlockTapping({ handleSubmit, priorRun });
 
   return (
     <div>

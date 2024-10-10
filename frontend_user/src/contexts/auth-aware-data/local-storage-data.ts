@@ -62,4 +62,17 @@ export const localStorageImpl: AllFncs = {
     setStorageData(allRuns);
     return newRun;
   },
+
+  postRuns: async (runs: RunUpload[]) => {
+    const validatedRuns = runs.map((run) => schemaRun.parse(run));
+    const allRuns = getStorageData();
+    validatedRuns.forEach((run) => {
+      if (!allRuns[run.key]) {
+        allRuns[run.key] = [];
+      }
+      allRuns[run.key].push(run);
+    });
+    setStorageData(allRuns);
+    return validatedRuns;
+  },
 };

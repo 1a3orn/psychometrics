@@ -4,8 +4,8 @@ import { useSequence } from "../../../hooks";
 
 import { Trial } from "./types";
 
-const MS_BETWEEN = 500;
-const MS_VISIBLE = 400;
+const MS_BETWEEN = 400;
+const MS_VISIBLE = 300;
 
 export const useCorsiBlockTappingOneTrial = ({
   trial,

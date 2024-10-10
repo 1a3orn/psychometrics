@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@headlessui/react";
@@ -62,6 +62,21 @@ export const VisualElement: React.FC<NavbarProps> = ({
 }) => {
   const navigate = useNavigate();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const mobileNavRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileNavRef.current && !mobileNavRef.current.contains(event.target as Node)) {
+        setMobileNavOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header
       id="page-header"
@@ -232,8 +247,9 @@ export const VisualElement: React.FC<NavbarProps> = ({
         </div>
 
         {/* Mobile Navigation */}
-        <div className={`lg:hidden ${mobileNavOpen ? "" : "hidden"}`}>
-          <nav className="flex flex-col gap-2 border-t border-teal-600 py-4">
+        <div ref={mobileNavRef} className={`lg:hidden ${mobileNavOpen ? "" : "hidden"}`}>
+          {/* Absolute positioning */}
+          <nav className="flex flex-col gap-2 py-4 bg-white w-full -mx-8 px-4 absolute top-0 left-0">
             {isGuest && <SignupButton onClick={onClickSignupFromGuest} className="flex justify-center" />}
             {links.map((link) => (
               <ButtonDark key={link.href} onClick={() => navigate(link.href)}>

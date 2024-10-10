@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 
 import { History } from "./types";
 import { MeasureEndingScreen } from "../../../components";
+import { SubmitValues } from "../types";
 
 export const ReverseDigitSpanResults = ({
   history,
@@ -9,7 +10,7 @@ export const ReverseDigitSpanResults = ({
   handleCancel,
 }: {
   history: History[];
-  handleSubmit: (data: Record<string, number>) => void;
+  handleSubmit: (data: SubmitValues) => void;
   handleCancel: () => void;
 }) => {
   const maxLength = useMemo(() => {
@@ -18,9 +19,7 @@ export const ReverseDigitSpanResults = ({
   }, [history]);
 
   const handleSubmitInner = useCallback(() => {
-    handleSubmit({
-      span: maxLength,
-    });
+    handleSubmit([{ key: "span", value: maxLength, displayLabel: "Span", displayValue: maxLength.toString() }]);
   }, [handleSubmit, maxLength]);
 
   return (

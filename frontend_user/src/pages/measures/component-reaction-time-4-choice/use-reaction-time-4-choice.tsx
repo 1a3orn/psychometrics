@@ -1,6 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { useTimeout, useKeyPress } from "../../../hooks";
 
+import { SubmitValues } from "../types";
+
 export type Choice = "A" | "S" | "K" | "L";
 const CHOICES: Choice[] = ["A", "S", "K", "L"];
 
@@ -13,7 +15,7 @@ const getRandomChoice = (): Choice => {
   return CHOICES[Math.floor(Math.random() * CHOICES.length)];
 };
 
-export const useReactionTime4Choice = ({ handleSubmit }: { handleSubmit: (data: Record<string, number>) => void }) => {
+export const useReactionTime4Choice = ({ handleSubmit }: { handleSubmit: (data: SubmitValues) => void }) => {
   // Immutable during hook lifecycle
   const choice = useMemo<Choice>(() => getRandomChoice(), []);
   const delay = useMemo(() => Math.floor(Math.random() * 9000) + 1000, []);
@@ -24,10 +26,20 @@ export const useReactionTime4Choice = ({ handleSubmit }: { handleSubmit: (data: 
   // Handlers
   const handleSubmitInner = useCallback(() => {
     if (state.stage === "result") {
-      handleSubmit({
-        accuracy: state.correct ? 1 : 0,
-        reaction_time: state.reactionTime,
-      });
+      handleSubmit([
+        {
+          key: "accuracy",
+          value: state.correct ? 1 : 0,
+          displayLabel: "Accuracy",
+          displayValue: state.correct ? "yes" : "no",
+        },
+        {
+          key: "reaction_time",
+          value: state.reactionTime,
+          displayLabel: "Reaction Time",
+          displayValue: state.reactionTime.toFixed(2),
+        },
+      ]);
     }
   }, [handleSubmit, state]);
 

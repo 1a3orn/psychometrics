@@ -56,7 +56,7 @@ export const ALL_MEASURES: MeasureDefinition[] = [
     description: "This is a Corsi Block Tapping measure.",
     shortDescription: "How well you can remember a sequence of blocks",
     categories: ["working_memory"] as Category[],
-    numberPerDefault: 1,
+    numberPerDefault: 3,
     Component: CorsiBlockTapping,
   },
   {

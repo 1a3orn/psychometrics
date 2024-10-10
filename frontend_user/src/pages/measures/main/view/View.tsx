@@ -1,25 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { UseMainReturn } from "./use-main";
-import { MeasureDefinition } from "../types";
-import { PageContent, CardBase, Button } from "../../../components";
-import { MeasureChartProcessed } from "./components";
-import { DownloadCSVLink } from "./ViewDownload";
-export const View = (props: UseMainReturn & { measure: MeasureDefinition }) => {
-  const navigate = useNavigate();
+import { MeasureDefinition } from "../../types";
+import { PageContent, CardBase, Button } from "../../../../components";
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+import { MeasureChartProcessed } from "../components";
+import { UseSwitchReturn } from "../use-switch";
+import { DownloadCSVLink } from "../ViewDownload";
 
-  const { userData } = props;
-
-  const mappedData = userData.map((run) => {
-    const base: Record<string, number | string> = { startedAt: new Date(run.startedAt).getTime() };
-    Object.keys(run.measures).forEach((key) => {
-      base[key] = run.measures[key];
-    });
-    return base;
-  });
+import { useView } from "./use-view";
+export const View = (props: UseSwitchReturn & { measure: MeasureDefinition }) => {
+  const { handleBack, mappedData } = useView(props);
 
   return (
     <PageContent>

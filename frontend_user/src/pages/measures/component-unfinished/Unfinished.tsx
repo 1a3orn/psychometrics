@@ -4,9 +4,14 @@ import { MeasureComponent } from "../types";
 
 export const Unfinished: MeasureComponent = ({ handleCancel, handleSubmit }) => {
   const handleSubmitInner = () => {
-    handleSubmit({
-      test: Math.floor(Math.random() * 10),
-    });
+    handleSubmit([
+      {
+        key: "test",
+        value: Math.floor(Math.random() * 10),
+        displayLabel: "Test",
+        displayValue: Math.floor(Math.random() * 10).toString(),
+      },
+    ]);
   };
 
   return (

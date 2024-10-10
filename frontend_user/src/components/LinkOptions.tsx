@@ -21,18 +21,18 @@ export const LinkOptions: React.FC<LinkOptionsProps> = ({ options }) => {
   );
 };
 
-export const GreyLink: React.FC<LinkOption> = ({ text, to, handleClick }) => {
+export const GreyLink: React.FC<LinkOption & { className?: string }> = ({ text, to, handleClick, className }) => {
   const commonClasses = "text-gray-600 hover:text-gray-800 transition-colors duration-200 cursor-pointer";
 
   if (to) {
     return (
-      <Link to={to} className={commonClasses}>
+      <Link to={to} className={`${className || commonClasses}`}>
         {text}
       </Link>
     );
   } else if (handleClick) {
     return (
-      <div onClick={handleClick} className={commonClasses}>
+      <div onClick={handleClick} className={`${className || commonClasses}`}>
         {text}
       </div>
     );

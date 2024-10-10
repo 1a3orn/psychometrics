@@ -17,7 +17,6 @@ export const LoginPage = () => {
               </button>
               <ErrorMessage error={error} />
             </form>
-            {/* Insert a line to separate the login button from the rest of the content */}
             <div className="border-t border-gray-300"></div>
             <LinkOptions
               options={[

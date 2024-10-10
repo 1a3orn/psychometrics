@@ -12,9 +12,7 @@ export const Test: MeasureComponent = ({ priorRun, handleCancel, handleSubmit })
 
   const handleSaveResult = () => {
     if (randomNumber !== null) {
-      handleSubmit({
-        test: randomNumber,
-      });
+      handleSubmit([{ key: "test", value: randomNumber, displayLabel: "Test", displayValue: randomNumber.toString() }]);
       setRandomNumber(null);
     }
   };

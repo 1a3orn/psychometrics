@@ -36,7 +36,7 @@ export const CorsiBlockTappingOneTrial = ({
         {trial.blockLocations.map((block, index) => (
           <div
             key={index}
-            onClick={() => handleClickedSquare(index)}
+            onMouseDown={() => handleClickedSquare(index)}
             style={{
               position: "absolute",
               left: block.x,
@@ -44,6 +44,7 @@ export const CorsiBlockTappingOneTrial = ({
               width: block.width,
               height: block.height,
               backgroundColor: highlightedSqIdx === index ? "red" : "blue",
+              borderRadius: "2px",
             }}
           />
         ))}

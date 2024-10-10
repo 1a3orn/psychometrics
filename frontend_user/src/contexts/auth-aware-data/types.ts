@@ -6,6 +6,7 @@ export type AllFncs = {
   getRunsRecent: () => Promise<LatestRuns[]>;
   getRunsAll: (key: string) => Promise<RunAllKey[]>;
   postRun: (run: RunUpload) => Promise<any>;
+  postRuns: (runs: RunUpload[]) => Promise<any>;
 };
 
 export type AuthAwareDataProviderType = {

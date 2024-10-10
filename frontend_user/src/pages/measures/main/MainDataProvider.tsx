@@ -19,15 +19,11 @@ const useGetAllRunsForKey = (measureKey: string) => {
 
   const loadingFnc = useCallback(() => fncs.getRunsAll(measureKey), [fncs, measureKey]);
 
-  console.log("loadingFnc", loadingFnc);
-
   return useAsync(loadingFnc);
 };
 
 export const MainDataProvider = ({ children, measure }: { children: React.ReactNode; measure: MeasureDefinition }) => {
   const asyncState = useGetAllRunsForKey(measure.key);
-
-  console.log("asyncState", asyncState);
 
   if (asyncState.type === "loading") {
     return <PageMainLoading />;

@@ -1,12 +1,12 @@
 import { useState, useCallback, useMemo } from "react";
 import { useTimeout } from "../../../hooks";
-
+import { SubmitValues } from "../types";
 type TestState =
   | { stage: "waiting" }
   | { stage: "click"; startTime: number }
   | { stage: "result"; reactionTime: number };
 
-export const useReactionTime = ({ handleSubmit }: { handleSubmit: (data: Record<string, number>) => void }) => {
+export const useReactionTime = ({ handleSubmit }: { handleSubmit: (data: SubmitValues) => void }) => {
   const delay = useMemo(() => Math.floor(Math.random() * 9000) + 1000, []);
 
   const [testState, setTestState] = useState<TestState>({ stage: "waiting" });
@@ -32,9 +32,14 @@ export const useReactionTime = ({ handleSubmit }: { handleSubmit: (data: Record<
 
   const handleSubmitInner = useCallback(() => {
     if (testState.stage === "result") {
-      handleSubmit({
-        reaction_time: testState.reactionTime,
-      });
+      handleSubmit([
+        {
+          key: "reaction_time",
+          value: testState.reactionTime,
+          displayLabel: "Reaction Time",
+          displayValue: testState.reactionTime.toFixed(2),
+        },
+      ]);
     }
   }, [handleSubmit, testState]);
 

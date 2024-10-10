@@ -23,7 +23,6 @@ export const DownloadCSVLink: React.FC<DownloadCSVLinkProps> = ({ measureKey, cl
       }
 
       const blob = await response.blob();
-      console.log("blob", blob);
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
