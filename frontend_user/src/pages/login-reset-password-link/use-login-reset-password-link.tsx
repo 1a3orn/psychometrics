@@ -4,7 +4,7 @@ import { postGetResetPasswordLink } from "../../api/req-common";
 import { useBasicForm } from "../../hooks/use-basic-form";
 
 export const useLoginResetPasswordLink = () => {
-  const { state, errors, handleChange } = useBasicForm(["username", "email"]);
+  const { state, handleChange } = useBasicForm(["username", "email"]);
 
   const [stringError, setStringError] = useState<string | null>(null);
   const [stringSuccess, setStringSuccess] = useState<string | null>(null);

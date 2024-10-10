@@ -6,10 +6,10 @@ import { postResetPassword } from "../../api/req-common";
 import { useBasicForm } from "../../hooks/use-basic-form";
 
 export const useLoginResetPassword = () => {
-  const { state, errors, handleChange } = useBasicForm(["password1", "password2"]);
+  const { state, handleChange } = useBasicForm(["password1", "password2"]);
 
   // Pull username + reset code from query params
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const username = useMemo(() => searchParams.get("username"), [searchParams]);
   const resetCode = useMemo(() => searchParams.get("code"), [searchParams]);
 
@@ -38,16 +38,25 @@ export const useLoginResetPassword = () => {
         return;
       }
 
-      postResetPassword(username, resetCode, state.password1).then((response) => {
-        if (response.success) {
-          setStringSuccess(response.value.message);
-        } else {
-          setStringError(response.error);
+      postResetPassword(username, resetCode, state.password1).then(
+        (response) => {
+          if (response.success) {
+            setStringSuccess(response.value.message);
+          } else {
+            setStringError(response.error);
+          }
         }
-      });
+      );
     },
     [state.password1, state.password2, username, resetCode]
   );
 
-  return { username, state, handleChange, stringError, stringSuccess, handleSubmit };
+  return {
+    username,
+    state,
+    handleChange,
+    stringError,
+    stringSuccess,
+    handleSubmit,
+  };
 };

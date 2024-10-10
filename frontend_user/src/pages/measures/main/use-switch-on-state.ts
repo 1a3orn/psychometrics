@@ -1,33 +1,39 @@
 import { useState, useCallback as uc } from "react";
 import { MeasureDefinition } from "../types";
 
-type MMHomeState = { type: "home" };
-type MMPlayingState = {
-  type: "playing";
-  numberToPlay: number;
+type MMViewState = { type: "view" };
+type MMPlayState = {
+  type: "play";
+  iterations: number;
 };
 
-export type MMState = MMHomeState | MMPlayingState;
+export type MMState = MMViewState | MMPlayState;
 
 export type UseMeasuresStateReturn = {
   state: MMState;
-  handleHome: () => void;
-  handleStartOne: () => void;
-  handleStartMany: () => void;
+  setMeasureView: () => void;
+  setMeasurePlayOne: () => void;
+  setMeasurePlayMany: () => void;
 };
 
 export const getNow = () => new Date().toISOString();
 
-export const isPlaying = (state: MMState): state is MMPlayingState => state.type === "playing";
-export const isHome = (state: MMState): state is MMHomeState => state.type === "home";
+export const isPlay = (s: MMState): s is MMPlayState => s.type === "play";
+export const isView = (s: MMState): s is MMViewState => s.type === "view";
 
-const INITIAL_STATE: MMState = { type: "home" };
+const INITIAL_STATE: MMState = { type: "view" };
 
-export const useSwitchOnState = (measure: MeasureDefinition): UseMeasuresStateReturn => {
+export const useSwitchOnState = (
+  measure: MeasureDefinition
+): UseMeasuresStateReturn => {
   const [state, ss] = useState<MMState>(INITIAL_STATE);
-  const handleHome = uc(() => ss({ type: "home" }), []);
-  const handleStartOne = uc(() => ss({ type: "playing", numberToPlay: 1 }), []);
-  const handleStartMany = uc(() => ss({ type: "playing", numberToPlay: measure.numberPerDefault }), []);
 
-  return { state, handleHome, handleStartOne, handleStartMany };
+  const setMeasureView = uc(() => ss({ type: "view" }), []);
+  const setMeasurePlayOne = uc(() => ss({ type: "play", iterations: 1 }), []);
+  const setMeasurePlayMany = uc(
+    () => ss({ type: "play", iterations: measure.numberPerDefault }),
+    []
+  );
+
+  return { state, setMeasureView, setMeasurePlayOne, setMeasurePlayMany };
 };

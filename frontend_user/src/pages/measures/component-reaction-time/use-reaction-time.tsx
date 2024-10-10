@@ -1,51 +1,50 @@
 import { useState, useCallback, useMemo } from "react";
 import { useTimeout } from "../../../hooks";
 import { SubmitValues } from "../types";
-type TestState =
-  | { stage: "waiting" }
-  | { stage: "click"; startTime: number }
-  | { stage: "result"; reactionTime: number };
 
-export const useReactionTime = ({ handleSubmit }: { handleSubmit: (data: SubmitValues) => void }) => {
-  const delay = useMemo(() => Math.floor(Math.random() * 9000) + 1000, []);
+type State = { stage: "waiting" } | { stage: "click"; startTime: number };
 
-  const [testState, setTestState] = useState<TestState>({ stage: "waiting" });
+export const useReactionTime = ({
+  handleSubmit,
+}: {
+  handleSubmit: (data: SubmitValues) => void;
+}) => {
+  // ---------------------
+  // Random delay between 1 and 100 seconds
+  // ---------------------
+  const delay = useMemo(() => Math.floor(Math.random() * 2000) + 1000, []);
+
+  // ---------------------
+  // State
+  const [state, setState] = useState<State>({ stage: "waiting" });
 
   const handleIsReady = useCallback(() => {
-    if (testState.stage === "waiting") {
-      setTestState({ stage: "click", startTime: Date.now() });
-    }
-  }, [testState]);
+    if (state.stage !== "waiting") return;
+    setState({ stage: "click", startTime: Date.now() });
+  }, [state]);
+
+  const handleClick = useCallback(() => {
+    if (state.stage !== "click") return;
+    const endTime = Date.now();
+    const reactionTime = endTime - state.startTime;
+    handleSubmit([
+      {
+        key: "reaction_time",
+        value: reactionTime,
+        displayLabel: "Reaction Time",
+        displayValue: reactionTime.toFixed(2),
+      },
+    ]);
+  }, [state, handleSubmit]);
 
   useTimeout({
     callback: handleIsReady,
     timeout: delay,
   });
 
-  const handleClick = useCallback(() => {
-    if (testState.stage === "click") {
-      const endTime = Date.now();
-      const reactionTime = endTime - testState.startTime;
-      setTestState({ stage: "result", reactionTime });
-    }
-  }, [testState]);
-
-  const handleSubmitInner = useCallback(() => {
-    if (testState.stage === "result") {
-      handleSubmit([
-        {
-          key: "reaction_time",
-          value: testState.reactionTime,
-          displayLabel: "Reaction Time",
-          displayValue: testState.reactionTime.toFixed(2),
-        },
-      ]);
-    }
-  }, [handleSubmit, testState]);
-
   return {
-    state: testState,
+    state,
     handleClick,
-    handleSubmitInner,
+    handleSubmit,
   };
 };

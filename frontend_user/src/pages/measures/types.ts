@@ -1,6 +1,11 @@
 import { TaskDecorated } from "../../shared-automatic";
 
-export type SubmitValue = { key: string; value: number; displayLabel: string; displayValue: string };
+export type SubmitValue = {
+  key: string;
+  value: number;
+  displayLabel: string;
+  displayValue: string;
+};
 export type SubmitValues = Array<SubmitValue>;
 
 export const measuresPrettyToMeasures = (msr: SubmitValues) => {
@@ -8,9 +13,12 @@ export const measuresPrettyToMeasures = (msr: SubmitValues) => {
 };
 
 export type MeasureComponent = React.ComponentType<{
+  currentIndex: number;
+  totalCount: number;
   priorRun?: Record<string, number>;
   handleCancel: () => void;
   handleSubmit: (values: SubmitValues) => void;
+  lastRun: boolean;
 }>;
 
 export type Category = "test" | "processing_speed" | "working_memory";

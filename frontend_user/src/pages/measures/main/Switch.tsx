@@ -1,23 +1,25 @@
+import { useContext } from "react";
+
 import { MeasureDefinition } from "../types";
+import { SwitchDataContext, SwitchDataProvider } from "./SwitchDataProvider";
 
-import { useSwitch } from "./use-switch";
+import { MeasureView } from "./measure-view";
+import { MeasurePlay } from "./measure-play";
 
-import { View } from "./view";
-import { Playing } from "./playing";
+export const Switch = ({ measure }: { measure: MeasureDefinition }) => (
+  <SwitchDataProvider measure={measure}>
+    <InnerSwitch measure={measure} />
+  </SwitchDataProvider>
+);
 
-export const Switch = ({ measure }: { measure: MeasureDefinition }) => {
-  const props = useSwitch(measure);
+const InnerSwitch = ({ measure }: { measure: MeasureDefinition }) => {
+  const props = useContext(SwitchDataContext);
   switch (props.state.type) {
-    case "home":
-      return <View {...props} measure={measure} />;
-    case "playing":
+    case "view":
+      return <MeasureView measure={measure} />;
+    case "play":
       return (
-        <Playing
-          {...props}
-          numberToPlay={props.state.numberToPlay}
-          measure={measure}
-          handleConclude={props.handleConclude}
-        />
+        <MeasurePlay measure={measure} iterations={props.state.iterations} />
       );
   }
 };

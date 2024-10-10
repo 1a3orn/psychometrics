@@ -14,3 +14,4 @@ export * from "./Pill";
 export * from "./MeasureEndingScreen";
 export * from "./LinkOptions";
 export * from "./review-results";
+export * from "./FullScreen";

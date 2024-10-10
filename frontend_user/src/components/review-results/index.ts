@@ -1,1 +1,1 @@
-export * from "../../pages/measures/main/playing/ReviewResults";
+export * from "../../pages/measures/main/measure-play/ReviewResults";

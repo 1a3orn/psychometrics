@@ -1,6 +1,6 @@
 import React from "react";
 import { GreyLink } from "../../../../components";
-import { RunWithExtra } from "./use-playing";
+import { RunWithExtra } from "./use-play-active";
 
 interface ReviewResultRowProps {
   result: RunWithExtra;
@@ -8,7 +8,11 @@ interface ReviewResultRowProps {
   handleToggleSelection: (index: number) => void;
 }
 
-export const ReviewResultsRow: React.FC<ReviewResultRowProps> = ({ result, index, handleToggleSelection }) => {
+export const ReviewResultsRow: React.FC<ReviewResultRowProps> = ({
+  result,
+  index,
+  handleToggleSelection,
+}) => {
   const textColor = result.selected ? "text-gray-600" : "text-gray-400";
   return (
     <div className={`${textColor} w-full`}>
